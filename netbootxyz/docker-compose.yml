@@ -14,7 +14,7 @@ services:
       - WEB_APP_PORT=3000 #optional
     volumes:
       - /var/lib/docker/volumes/netbootxyz/config:/config
-      - /var/lib/docker/volumes/netbootxyz/assets:/assets #optional
+      - /mnt/host/d/iso:/assets #optional
     ports:
       - 3000:3000
       - 69:69/udp
