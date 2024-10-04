@@ -1,0 +1,15 @@
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - /var/lib/docker/volumes/homeassistant_config/_data:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: bridge
+    ports:
+      - 8123:8123 #optional
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0 #optional
