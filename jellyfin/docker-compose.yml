@@ -1,0 +1,14 @@
+services:
+  jellyfin:
+    container_name: jellyfin 
+    image: "linuxserver/jellyfin"
+    volumes:
+      - /mnt/host/d/docker-data/jellyfin/config:/config
+    restart: unless-stopped
+    privileged: true
+    network_mode: bridge
+    ports:
+      - 8096:8096
+      - 8920:8920
+      - 7359:7359
+      - 1900:1900
