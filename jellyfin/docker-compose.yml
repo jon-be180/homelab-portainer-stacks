@@ -4,6 +4,8 @@ services:
     image: "linuxserver/jellyfin"
     volumes:
       - /mnt/host/d/docker-data/jellyfin/config:/config
+      - D:/shows:/shows
+      - D:/movies:/movies
     restart: unless-stopped
     privileged: true
     network_mode: bridge
