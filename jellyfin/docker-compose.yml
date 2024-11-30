@@ -1,11 +1,11 @@
 services:
   jellyfin:
-    container_name: jellyfin 
+    container_name: jellyfin
     image: "linuxserver/jellyfin"
     volumes:
-      - /mnt/host/d/docker-data/jellyfin/config:/config
-      - D:/shows:/shows
-      - D:/movies:/movies
+      - D:/Docker/jellyfin/config:/config
+      - D:/Shows:/shows
+      - D:/Movies:/movies
     restart: unless-stopped
     privileged: true
     network_mode: bridge
