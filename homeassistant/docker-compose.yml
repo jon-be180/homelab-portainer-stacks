@@ -13,3 +13,4 @@ services:
       - 8123:8123 #optional
     devices:
       - /dev/zigbee:/dev/zigbee
+      - /dev/ttyUSB0:/dev/ttyUSB0
