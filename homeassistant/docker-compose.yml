@@ -12,4 +12,4 @@ services:
     ports:
       - 8123:8123 #optional
     devices:
-      - /dev/ttyACM0:/dev/ttyACM0 #optional
+      - /dev/zigbee:/dev/zigbee
