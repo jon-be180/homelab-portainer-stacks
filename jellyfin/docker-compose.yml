@@ -1,7 +1,7 @@
 services:
   jellyfin:
     container_name: jellyfin
-    image: "linuxserver/jellyfin"
+    image: "linuxserver/jellyfin:latest"
     volumes:
       - D:/Docker/jellyfin/config:/config
       - D:/Shows:/shows
