@@ -3,7 +3,8 @@ services:
     container_name: wireguard
     image: "ghcr.io/wg-easy/wg-easy:latest"
     environment:
-      - WG_HOST=gt.vpn.knightgil.com
+      - WG_HOST=${HOST}
+      - PASSWORD=${PASSWORD}
     volumes:
       - D:\Docker\wireguard/etc/wireguard:/etc/wireguard
     restart: unless-stopped
