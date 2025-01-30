@@ -4,7 +4,7 @@ services:
     image: "ghcr.io/wg-easy/wg-easy:latest"
     environment:
       - WG_HOST=${HOST}
-      - PASSWORD=${PASSWORD}
+      - PASSWORD_HASH=${PASSWORD_HASH}
     volumes:
       - D:\Docker\wireguard/etc/wireguard:/etc/wireguard
     restart: unless-stopped
