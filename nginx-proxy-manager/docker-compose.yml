@@ -9,7 +9,7 @@ services:
       # Add any other Stream port you want to expose
       - '51820:51820' # Wireguard VPN
 
-    environment:
+   #environment:
       # Uncomment this if you want to change the location of
       # the SQLite DB file within the container
       # DB_SQLITE_FILE: "/data/database.sqlite"
