@@ -1,21 +1,29 @@
 services:
+  cloudflare-ddns:
+    image: oznu/cloudflare-ddns
+    container_name: cloudflare-ddns
+    restart: always
+    environment:
+      - API_KEY
+      - ZONE
+      - SUBDOMAIN
   nginx-proxy-manager:
-    image: 'jc21/nginx-proxy-manager:latest'
+    image: "jc21/nginx-proxy-manager:latest"
     ports:
       # These ports are in format <host-port>:<container-port>
-      - '80:80' # Public HTTP Port
-      - '443:443' # Public HTTPS Port
-      - '81:81' # Admin Web Port
+      - "80:80" # Public HTTP Port
+      - "443:443" # Public HTTPS Port
+      - "81:81" # Admin Web Port
       # Add any other Stream port you want to expose
-      - '51820:51820' # Wireguard VPN
+      - "51820:51820" # Wireguard VPN
 
-   #environment:
-      # Uncomment this if you want to change the location of
-      # the SQLite DB file within the container
-      # DB_SQLITE_FILE: "/data/database.sqlite"
+    #environment:
+    # Uncomment this if you want to change the location of
+    # the SQLite DB file within the container
+    # DB_SQLITE_FILE: "/data/database.sqlite"
 
-      # Uncomment this if IPv6 is not enabled on your host
-      # DISABLE_IPV6: 'true'
+    # Uncomment this if IPv6 is not enabled on your host
+    # DISABLE_IPV6: 'true'
 
     volumes:
       - D:\Docker\npm/data:/data
