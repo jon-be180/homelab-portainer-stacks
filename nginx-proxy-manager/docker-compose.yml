@@ -3,6 +3,7 @@ services:
     image: oznu/cloudflare-ddns
     container_name: cloudflare-ddns
     restart: always
+    network_mode: "host"
     environment:
       - API_KEY
       - ZONE
