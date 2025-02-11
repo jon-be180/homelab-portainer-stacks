@@ -3,6 +3,8 @@ services:
     image: oznu/cloudflare-ddns
     container_name: cloudflare-ddns
     restart: always
+    networks:
+      - my-network
     environment:
       - API_KEY
       - ZONE
@@ -30,3 +32,8 @@ services:
       - D:\Docker\npm/data:/data
       - D:\Docker\npm\letsencrypt:/etc/letsencrypt
     restart: unless-stopped
+
+networks:
+  my-network:
+    driver: bridge
+    enable_ipv6: true
