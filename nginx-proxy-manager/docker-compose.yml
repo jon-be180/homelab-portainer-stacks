@@ -7,6 +7,7 @@ services:
       - API_KEY
       - ZONE
       - SUBDOMAIN
+      - RRTYPE
   nginx-proxy-manager:
     image: "jc21/nginx-proxy-manager:latest"
     ports:
