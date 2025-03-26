@@ -28,6 +28,8 @@ services:
     restart: always
     healthcheck:
       disable: false
+    volumes:
+      - "D:\photos:/external-photos"
 
   immich-machine-learning:
     container_name: immich_machine_learning
