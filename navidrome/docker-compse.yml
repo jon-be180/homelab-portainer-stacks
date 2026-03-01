@@ -1,0 +1,23 @@
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    ports:
+      - "4533:4533"
+    restart: unless-stopped
+    environment:
+      # Use forward slashes for Windows paths
+      ND_SCANSCHEDULE: "@every 1h"
+      ND_LOGLEVEL: info  
+      ND_BASEURL: "https://music.yourdomain.com" 
+    volumes:
+      - D:/docker/navidrome/data:/data    # Put the "brains" on your SSD
+      - D:/music:/music:ro        # Put the "body" (music files) on your HDD
+
+  cloudflared-music:
+    container_name: navidrome_cloudflared
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    command: tunnel run
