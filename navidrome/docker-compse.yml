@@ -9,11 +9,8 @@ services:
       # Use forward slashes for Windows paths
       ND_SCANSCHEDULE: "@every 1h"
       ND_LOGLEVEL: info  
-      ND_BASEURL: "https://music.yourdomain.com" 
-    volumes:
-      - D:/docker/navidrome/data:/data    # Put the "brains" on your SSD
-      - D:/music:ro        # Put the "body" (music files) on your HDD
-
+      ND_BASEURL: ${ND_BASEURL}
+    
   cloudflared-music:
     container_name: navidrome_cloudflared
     image: cloudflare/cloudflared:latest
