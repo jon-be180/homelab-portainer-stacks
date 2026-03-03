@@ -12,7 +12,7 @@ services:
       ND_BASEURL: ${ND_BASEURL}
     volumes:
       - D:/docker/navidrome/data:/data    # Put the "brains" on your SSD
-
+      - D:/Music:/music:ro        # Put the "body" (music files) on your HDD
     
   cloudflared-music:
     container_name: navidrome_cloudflared
