@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  openspeedtest:
+    image: openspeedtest/latest
+    container_name: openspeedtest
+    restart: unless-stopped
+    ports:
+      - "3000:3000" # HTTP Access
+      - "3001:3001" # HTTPS Access
+    environment:
+      - TZ=America/Guatemala # Keeping it synced with your local time
+      - SET_SERVER_NAME=Jon-Media-Server
