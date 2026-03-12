@@ -10,3 +10,11 @@ services:
     environment:
       - TZ=America/Guatemala # Keeping it synced with your local time
       - SET_SERVER_NAME=Jon-Media-Server
+
+  cloudflared:
+    container_name: openspeedtest_cloudflared
+    image: cloudflare/cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
