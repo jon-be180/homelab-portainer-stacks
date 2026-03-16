@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  tdarr:
+    container_name: tdarr
+    image: ghcr.io/haveagitgat/tdarr:latest
+    restart: unless-stopped
+    ports:
+      - "9425:8265" # WebUI
+      - "9426:8266" # Server
+    environment:
+      - TZ=UTC
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=002
+      - serverIP=0.0.0.0
+      - serverPort=8266
+      - webUIPort=8265
+      - internalNode=true
+      - inContainer=true
+      - nodeName=MainNode
+    volumes:
+      # --- BULK STORAGE (D: Drive) ---
+      # Keeping app data organized with your other projects
+      - D:\Docker\tdarr\server:/app/server
+      - D:\Docker\tdarr\configs:/app/configs
+      - D:\Docker\tdarr\logs:/app/logs
+      # Your Media Libraries
+      - D:\Movies:/media/movies
+      - D:\Shows:/media/shows
+
+      # --- HIGH SPEED CACHE (C: Drive NVMe) ---
+      # This is the "Work Bench" where the heavy lifting happens
+      - C:\Docker\tdarr\transcode_cache:/temp
