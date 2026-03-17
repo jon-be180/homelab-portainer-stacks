@@ -15,8 +15,8 @@ services:
       - PGID=1000
       - UMASK_SET=002
       - serverIP=0.0.0.0        # Keep this at 0.0.0.0 for Docker
-      - serverPort=9426         # Tell the server it lives on 9426
-      - webUIPort=9425          # Tell the server the UI is on 9425
+      - serverPort=8266        # Back to internal port
+      - webUIPort=8265         # Back to internal port
       - internalNode=true
       - inContainer=true
       - nodeName=MainNode
