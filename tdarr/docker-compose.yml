@@ -8,14 +8,15 @@ services:
     ports:
       - "9425:8265" # WebUI
       - "9426:8266" # Server
+      - "9427:8267" # Internal Node Sync (Crucial for UI)
     environment:
       - TZ=UTC
       - PUID=1000
       - PGID=1000
       - UMASK_SET=002
-      - serverIP=media.local
-      - serverPort=8266
-      - webUIPort=8265
+      - serverIP=0.0.0.0        # Keep this at 0.0.0.0 for Docker
+      - serverPort=9426         # Tell the server it lives on 9426
+      - webUIPort=9425          # Tell the server the UI is on 9425
       - internalNode=true
       - inContainer=true
       - nodeName=MainNode
