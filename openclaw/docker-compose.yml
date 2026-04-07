@@ -5,6 +5,7 @@ services:
     image: ghcr.io/openclaw/openclaw:latest
     container_name: openclaw-gateway
     restart: unless-stopped
+    user: "0:0"
     volumes:
       - ${CONFIG_BASE_DIR}/openclaw:/home/node/.openclaw
     environment:
