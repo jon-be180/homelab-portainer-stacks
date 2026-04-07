@@ -11,6 +11,8 @@ services:
     environment:
       - TZ=${TIMEZONE}
       - OPENCLAW_DISABLE_SSRF_GUARD=1
+      - OPENCLAW_GATEWAY_HOST=0.0.0.0
+      - OPENCLAW_GATEWAY_TOKEN=secrettoken
       - OPENCLAW_MODEL_PROVIDER=openai
       # Your MacBook's Static LAN IP
       - OPENCLAW_MODEL_URL=http://MacBook-Pro.local:11434/v1
