@@ -4,6 +4,7 @@ services:
   openclaw-gateway:
     image: ghcr.io/openclaw/openclaw:latest
     container_name: openclaw-gateway
+    network_mode: host
     restart: unless-stopped
     volumes:
       - ${CONFIG_BASE_DIR}/openclaw:/home/node/.openclaw
