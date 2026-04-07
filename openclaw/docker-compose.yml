@@ -4,7 +4,6 @@ services:
   openclaw-gateway:
     image: ghcr.io/openclaw/openclaw:latest
     container_name: openclaw-gateway
-    network_mode: host
     restart: unless-stopped
     volumes:
       - ${CONFIG_BASE_DIR}/openclaw:/home/node/.openclaw
@@ -14,10 +13,8 @@ services:
       - OPENCLAW_GATEWAY_CUSTOM_BIND_HOST=0.0.0.0
       - OPENCLAW_GATEWAY_TOKEN=secrettoken
       - OPENCLAW_MODEL_PROVIDER=openai
-      # Your MacBook's Static LAN IP
       - OPENCLAW_MODEL_URL=http://MacBook-Pro.local:11434/v1
       - OPENCLAW_MODEL_ID=qwen3-7b
-      # Forces the gateway to compress history sooner to save local RAM
       - OPENCLAW_CONTEXT_LIMIT=8192 
     ports:
       - "18789:18789"
@@ -27,7 +24,7 @@ services:
         "dist/index.js",
         "gateway",
         "--bind",
-        "${OPENCLAW_GATEWAY_BIND:-lan}",
+        "custom",
         "--port",
         "18789",
         "--allow-unconfigured"
