@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   openclaw-gateway:
-    image: openclaw/gateway:latest
+    image: ghcr.io/openclaw/openclaw:latest
     container_name: openclaw-gateway
     restart: unless-stopped
     volumes:
