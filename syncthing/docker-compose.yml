@@ -9,8 +9,8 @@ services:
       - PUID=1000
       - PGID=1000
     volumes:
-      - D:\Docker\syncthing\config:/config
-      - D:\Backups\syncthing:/var/syncthing
+      - ${DOCKER_DATA_PATH}\syncthing\config:/config
+      - ${DOCKER_DATA_PATH}\syncthing:/var/syncthing
     ports:
       - 8384:8384 # Web UI
       - 22000:22000/tcp # TCP file transfers
