@@ -23,13 +23,13 @@ services:
     volumes:
       # --- BULK STORAGE (D: Drive) ---
       # Keeping app data organized with your other projects
-      - D:\Docker\tdarr\server:/app/server
-      - D:\Docker\tdarr\configs:/app/configs
-      - D:\Docker\tdarr\logs:/app/logs
+      - ${DOCKER_DATA_PATH}\tdarr\server:/app/server
+      - ${DOCKER_DATA_PATH}\tdarr\configs:/app/configs
+      - ${DOCKER_DATA_PATH}\tdarr\logs:/app/logs
       # Your Media Libraries
       - D:\Movies:/media/movies
       - D:\Shows:/media/shows
 
       # --- HIGH SPEED CACHE (C: Drive NVMe) ---
       # This is the "Work Bench" where the heavy lifting happens
-      - C:\Docker\tdarr\transcode_cache:/temp
+      - ${DOCKER_DATA_PATH}\tdarr\transcode_cache:/temp
