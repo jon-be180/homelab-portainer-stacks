@@ -1,19 +1,36 @@
 ---
 version: "3"
 services:
-  syncthing:
+  syncthing-ssd:
     image: syncthing/syncthing:latest
-    container_name: syncthing
-    hostname: syncthing
+    container_name: syncthing-ssd
+    hostname: syncthing-ssd
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
       - ${DOCKER_DATA_PATH}\syncthing\config:/config
-      - ${DOCKER_DATA_PATH}\syncthing:/var/syncthing
+      - ${BACKUP_HDD_DATA_PATH}\syncthing:/var/syncthing
     ports:
       - 8384:8384 # Web UI
       - 22000:22000/tcp # TCP file transfers
       - 22000:22000/udp # QUIC file transfers
       - 21027:21027/udp # Receive local discovery broadcasts
+    restart: unless-stopped
+
+  # Instance 2: The "Backup" on your Spinning Drive
+  syncthing-hdd:
+    image: syncthing/syncthing:latest
+    container_name: syncthing-hdd
+    hostname: syncthing-hdd
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ${DOCKER_DATA_PATH}/syncthing/hdd_config:/config
+      - ${BACKUP_HDD_DATA_PATH}:/var/syncthing/backups  # Point this to your HDD path
+    ports:
+      - 8385:8384 # Different Web UI port (8385)
+      - 22001:22000/tcp # Different transfer port
+      - 22001:22000/udp
     restart: unless-stopped
