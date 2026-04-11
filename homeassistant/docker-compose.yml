@@ -3,7 +3,7 @@ services:
     container_name: homeassistant
     image: "homeassistant/home-assistant:latest"
     volumes:
-      - D:\Docker\homeassistant/config:/config
+      - ${DOCKER_DATA_PATH}\homeassistant/config:/config
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:ro
     restart: unless-stopped
