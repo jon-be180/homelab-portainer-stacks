@@ -3,7 +3,7 @@ services:
     container_name: jellyfin
     image: "linuxserver/jellyfin:latest"
     volumes:
-      - D:/Docker/jellyfin/config:/config
+      - ${DOCKER_DATA_PATH}/jellyfin/config:/config
       - D:/Shows:/shows
       - D:/Movies:/movies
     restart: unless-stopped
