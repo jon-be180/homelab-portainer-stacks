@@ -29,8 +29,8 @@ services:
     # DISABLE_IPV6: 'true'
 
     volumes:
-      - D:\Docker\npm/data:/data
-      - D:\Docker\npm\letsencrypt:/etc/letsencrypt
+      - ${DOCKER_DATA_PATH}\npm/data:/data
+      - ${DOCKER_DATA_PATH}\npm\letsencrypt:/etc/letsencrypt
     restart: unless-stopped
 
 networks:
