@@ -11,7 +11,7 @@ services:
       ND_LOGLEVEL: info  
       ND_BASEURL: ${ND_BASEURL}
     volumes:
-      - D:/docker/navidrome/data:/data    # Put the "brains" on your SSD
+      - ${DOCKER_DATA_PATH}/navidrome/data:/data    # Put the "brains" on your SSD
       - D:/Music:/music:ro        # Put the "body" (music files) on your HDD
     
   cloudflared-music:
