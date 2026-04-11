@@ -6,7 +6,7 @@ services:
       - WG_HOST=${HOST}
       - PASSWORD_HASH=${PASSWORD_HASH}
     volumes:
-      - D:\Docker\wireguard/etc/wireguard:/etc/wireguard
+      - ${DOCKER_DATA_PATH}\wireguard/etc/wireguard:/etc/wireguard
     restart: unless-stopped
     ports:
       - "51820:51820/udp"
