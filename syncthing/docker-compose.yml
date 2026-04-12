@@ -8,6 +8,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
+      - STHOMEDIR=/config
     volumes:
       - ${DOCKER_DATA_PATH}/syncthing/config:/config
       - ${BACKUP_SSD_DATA_PATH}:/var/syncthing
@@ -28,6 +29,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
+      - STHOMEDIR=/config
     volumes:
       - ${DOCKER_DATA_PATH}/syncthing/hdd_config:/config
       - ${BACKUP_HDD_DATA_PATH}:/var/syncthing  # Point this to your HDD path
