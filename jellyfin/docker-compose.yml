@@ -13,10 +13,7 @@ services:
       - TZ=America/Guatemala
       - JELLYFIN_PublishedServerUrl=${SERVER_IP} # For better discovery
       - LIBVA_DRIVER_NAME=radeonsi # Explicitly tell it to use AMD
-    user: "1000:107" # Force the user into the 'render' group (Standard WSL2 GID)
-    group_add:
-      - "107" # render
-      - "44"  # video
+      - DOCKER_MODS=linuxserver/mods:jellyfin-amd
     restart: unless-stopped
     network_mode: bridge
     ports:
