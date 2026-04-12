@@ -8,7 +8,7 @@ services:
       - PGID=1000
     volumes:
       - ${DOCKER_DATA_PATH}\syncthing\config:/config
-      - ${BACKUP_SSD_DATA_PATH}\syncthing:/var/syncthing
+      - ${BACKUP_SSD_DATA_PATH}:/var/syncthing
     ports:
       - 8384:8384 # Web UI
       - 22000:22000/tcp # TCP file transfers
@@ -26,7 +26,7 @@ services:
       - PGID=1000
     volumes:
       - ${DOCKER_DATA_PATH}/syncthing/hdd_config:/config
-      - ${BACKUP_HDD_DATA_PATH}:/var/syncthing/backups  # Point this to your HDD path
+      - ${BACKUP_HDD_DATA_PATH}:/var/syncthing  # Point this to your HDD path
     ports:
       - 8385:8384 # Different Web UI port (8385)
       - 22001:22000/tcp # Different transfer port
