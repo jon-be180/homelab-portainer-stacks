@@ -27,7 +27,6 @@ services:
     # AMD GPU Pass-through (WSL2 / Windows)
     devices:
       - /dev/dxg:/dev/dxg
-      - /dev/dri:/dev/dri
     deploy:
       resources:
         limits:
