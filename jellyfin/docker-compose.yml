@@ -1,16 +1,36 @@
 services:
   jellyfin:
     container_name: jellyfin
-    image: "linuxserver/jellyfin:latest"
+    image: lscr.io/linuxserver/jellyfin:latest # LinuxServer image is better for permissions
     volumes:
       - ${DOCKER_DATA_PATH}/jellyfin/config:/config
-      - D:/Shows:/shows
-      - D:/Movies:/movies
+      - ${DOCKER_DATA_PATH}/jellyfin/cache:/cache
+      - ${SHOWS_PATH}:/shows
+      - ${MOVIES_PATH}:/movies
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Guatemala
+      - JELLYFIN_PublishedServerUrl=${SERVER_IP} # For better discovery
     restart: unless-stopped
-    privileged: true
     network_mode: bridge
     ports:
       - 8096:8096
       - 8920:8920
-      - 7359:7359
-      - 1900:1900
+      - 7359:7359/udp # Discovery
+      - 1900:1900/udp # DLNA
+    # AMD GPU Pass-through (WSL2 / Windows)
+    devices:
+      - /dev/dri:/dev/dri # This allows the AMD GPU to handle the heavy lifting
+    deploy:
+      resources:
+        limits:
+          memory: 4G # Prevents a memory leak from crashing your server
+    healthcheck:
+      # -f: Fail silently on server errors
+      # -s: Silent mode (don't show progress)
+      test: ["CMD-SHELL", "curl -f s http://localhost:8096/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s # Gives Jellyfin time to index on startup
