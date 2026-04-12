@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   syncthing-ssd:
     image: syncthing/syncthing:latest
@@ -7,7 +9,7 @@ services:
       - PUID=1000
       - PGID=1000
     volumes:
-      - ${DOCKER_DATA_PATH}\syncthing\config:/config
+      - ${DOCKER_DATA_PATH}/syncthing/config:/config
       - ${BACKUP_SSD_DATA_PATH}:/var/syncthing
     ports:
       - 8384:8384 # Web UI
@@ -15,6 +17,8 @@ services:
       - 22000:22000/udp # QUIC file transfers
       - 21027:21027/udp # Receive local discovery broadcasts
     restart: unless-stopped
+    networks:
+      - sync-internal
 
   # Instance 2: The "Backup" on your Spinning Drive
   syncthing-hdd:
@@ -32,3 +36,18 @@ services:
       - 22001:22000/tcp # Different transfer port
       - 22001:22000/udp
     restart: unless-stopped
+    networks:
+      - sync-internal
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "curl", "-fk", "https://localhost:8384/rest/system/ping"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+networks:
+  sync-internal:
+    driver: bridge
