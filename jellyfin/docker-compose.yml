@@ -26,7 +26,7 @@ services:
       - 1900:1900/udp # DLNA
     # AMD GPU Pass-through (WSL2 / Windows)
     devices:
-      - /dev/dri:/dev/dri # This allows the AMD GPU to handle the heavy lifting
+      - /dev/dxg:/dev/dxg
     deploy:
       resources:
         limits:
