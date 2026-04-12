@@ -13,7 +13,9 @@ services:
       - PGID=1000
       - TZ=America/Guatemala
       - JELLYFIN_PublishedServerUrl=${SERVER_IP} # For better discovery
-      - LIBVA_DRIVER_NAME=radeonsi # Explicitly tell it to use AMD
+      # These three lines are the fix for Ryzen 4000 series on WSL2
+      - LIBVA_DRIVER_NAME=d3d12
+      - MESA_D3D12_DEFAULT_ADAPTER_NAME=AMD
       - DOCKER_MODS=linuxserver/mods:jellyfin-amd
     restart: unless-stopped
     network_mode: bridge
