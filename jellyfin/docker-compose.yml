@@ -14,7 +14,6 @@ services:
       - TZ=America/Guatemala
       - JELLYFIN_PublishedServerUrl=${SERVER_IP} # For better discovery
     restart: unless-stopped
-    network_mode: bridge
     networks:
       - jellyfin-net
     ports:
