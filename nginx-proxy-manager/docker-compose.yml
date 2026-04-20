@@ -1,39 +1,60 @@
+version: '3.8'
+
 services:
-  cloudflare-ddns:
-    image: oznu/cloudflare-ddns
-    container_name: cloudflare-ddns
-    restart: always
-    networks:
-      - my-network
-    environment:
-      - API_KEY
-      - ZONE
-      - SUBDOMAIN
-      - RRTYPE
   nginx-proxy-manager:
-    image: "jc21/nginx-proxy-manager:latest"
-    ports:
-      # These ports are in format <host-port>:<container-port>
-      - "80:80" # Public HTTP Port
-      - "443:443" # Public HTTPS Port
-      - "81:81" # Admin Web Port
-      # Add any other Stream port you want to expose
-      - "51820:51820" # Wireguard VPN
-
-    #environment:
-    # Uncomment this if you want to change the location of
-    # the SQLite DB file within the container
-    # DB_SQLITE_FILE: "/data/database.sqlite"
-
-    # Uncomment this if IPv6 is not enabled on your host
-    # DISABLE_IPV6: 'true'
-
-    volumes:
-      - ${DOCKER_DATA_PATH}\npm/data:/data
-      - ${DOCKER_DATA_PATH}\npm\letsencrypt:/etc/letsencrypt
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginx-proxy-manager
     restart: unless-stopped
+    ports:
+      - '80:80'   # Local HTTP
+      - '81:81'   # Admin Panel
+      - '443:443' # Local HTTPS
+    environment:
+      - TZ=America/Guatemala
+    volumes:
+      - ${SSD_PATH}/npm/data:/data
+      - ${SSD_PATH}/npm/letsencrypt:/etc/letsencrypt
+    networks:
+      - proxy-tier
+    depends_on:
+      step-ca:
+        condition: service_healthy
+
+  step-ca:
+    image: smallstep/step-ca:latest
+    container_name: step-ca
+    restart: unless-stopped
+    environment:
+      - DOCKER_STEPCA_INIT_NAME=Jon-Home-CA
+      - DOCKER_STEPCA_INIT_DNS_NAMES=step-ca,step-ca.local,${LOCAL_IP}
+      - DOCKER_STEPCA_INIT_REMOTE_MANAGEMENT=true
+      # We provide a password file to prevent the container from hanging on start
+      - DOCKER_STEPCA_INIT_PASSWORD_FILE=/home/step/secrets/password.txt
+      - TZ=America/Guatemala
+    volumes:
+      - ${SSD_PATH}/step-ca:/home/step
+    networks:
+      - proxy-tier
+    healthcheck:
+      test: ["CMD", "step", "ca", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared-tunnel
+    restart: unless-stopped
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    # Standardizing command for performance
+    command: tunnel --no-autoupdate run
+    networks:
+      - proxy-tier
+    depends_on:
+      - nginx-proxy-manager
 
 networks:
-  my-network:
+  proxy-tier:
+    name: proxy-tier
     driver: bridge
-    enable_ipv6: true
