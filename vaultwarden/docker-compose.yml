@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    environment:
+      - SIGNUPS_ALLOWED=${SIGNUPS_ALLOWED:-true}
+      - ADMIN_TOKEN=${ADMIN_TOKEN}
+      # Use HTTPS here because Nginx will provide it
+      - DOMAIN=https://vault.homelab.local 
+      - ENABLE_DB_WAL=true
+    volumes:
+      - ${SSD_PATH}:/data
+    # No ports here! Access only via the Nginx network
+    networks:
+      - proxy-tier
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+
+  vaultwarden-backup:
+    image: ttionya/vaultwarden-backup:latest
+    container_name: vaultwarden-backup
+    restart: unless-stopped
+    environment:
+      - DATA_DIR=/data
+      - BACKUP_DIR=/backup
+      - CRON=0 3 * * *
+      - TZ=America/Guatemala
+    volumes:
+      - ${SSD_PATH}:/data:ro
+      - ${HDD_PATH}:/backup
+    networks:
+      - proxy-tier
+
+networks:
+  proxy-tier:
+    external: true # Assumes your Nginx stack is on this network
