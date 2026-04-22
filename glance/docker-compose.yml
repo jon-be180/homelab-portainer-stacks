@@ -12,6 +12,7 @@ services:
     volumes:
       # Updated internal path to /etc/glance/glance.yml
       - ${GLANCE_STORAGE_PATH}/glance.yml:/etc/glance/glance.yml
+      - ${GLANCE_STORAGE_PATH}/glance.yml:/app/config/glance.yml
       # Assets also typically live in /etc/glance/assets now if needed
       - ${GLANCE_STORAGE_PATH}/assets:/etc/glance/assets
     
