@@ -9,13 +9,11 @@ services:
       - "8080:8080"
     environment:
       - TZ=America/Guatemala
-      # These variables allow you to switch storage via the Portainer UI
-      - CONFIG_DIR=${GLANCE_STORAGE_PATH:-/home/user/glance/config}
     volumes:
-      # Mount the config file from your chosen storage path
-      - ${GLANCE_STORAGE_PATH:-./glance}/glance.yml:/app/glance.yml
-      # Mount assets (icons, etc) if you want them persistent
-      - ${GLANCE_STORAGE_PATH:-./glance}/assets:/app/assets
+      # Updated internal path to /etc/glance/glance.yml
+      - ${GLANCE_STORAGE_PATH}/glance.yml:/etc/glance/glance.yml
+      # Assets also typically live in /etc/glance/assets now if needed
+      - ${GLANCE_STORAGE_PATH}/assets:/etc/glance/assets
     
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/"]
