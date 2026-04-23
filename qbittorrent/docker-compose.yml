@@ -24,7 +24,7 @@ radarr:
     environment:
       - TZ=${TIMEZONE}
     volumes:
-      - ${CONF_PATH}/radarr:/config
+      - ${RADARR_CONF_PATH}/radarr:/config
       - ${DATA_PATH}:/data
     ports:
       - 7878:7878
@@ -36,7 +36,7 @@ radarr:
     environment:
       - TZ=${TIMEZONE}
     volumes:
-      - ${CONF_PATH}/sonarr:/config
+      - ${SONARR_CONF_PATH}/sonarr:/config
       - ${DATA_PATH}:/data
     ports:
       - 8989:8989
