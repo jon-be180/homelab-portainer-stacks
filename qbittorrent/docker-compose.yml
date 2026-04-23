@@ -24,8 +24,9 @@ radarr:
     environment:
       - TZ=${TIMEZONE}
     volumes:
-      - ${RADARR_CONF_PATH}/radarr:/config
+      - ${RADARR_CONF_PATH}:/config
       - ${DATA_PATH}:/data
+      - ${MOVIES_PATH}:/movies
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -36,8 +37,9 @@ radarr:
     environment:
       - TZ=${TIMEZONE}
     volumes:
-      - ${SONARR_CONF_PATH}/sonarr:/config
+      - ${SONARR_CONF_PATH}:/config
       - ${DATA_PATH}:/data
+      - ${SHOWS_PATH}:/shows
     ports:
       - 8989:8989
     restart: unless-stopped
