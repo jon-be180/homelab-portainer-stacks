@@ -4,6 +4,7 @@ services:
     container_name: qbittorrent
     environment:
       - WEBUI_PORT=${WEB_PORT}
+      - TZ=${TIMEZONE}
     volumes:
       - ${CONF_PATH}:/config
       - ${DATA_PATH}:/data
