@@ -7,7 +7,7 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${CONF_PATH}:/config
-      - ${DATA_PATH}:/data
+      - ${DATA_PATH}:/downloads
     ports:
       - ${WEB_PORT}:${WEB_PORT}
     healthcheck:
