@@ -21,7 +21,7 @@ services:
     container_name: openspeedtest_cloudflared
     image: cloudflare/cloudflared
     restart: unless-stopped
-    command: tunnel run
+    command: tunnel run --metrics
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     depends_on:
