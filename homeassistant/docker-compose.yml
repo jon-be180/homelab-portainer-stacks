@@ -14,3 +14,9 @@ services:
     devices:
       - /dev/zigbee:/dev/zigbee
       - /dev/ttyUSB0:/dev/ttyUSB0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8123/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s # It takes longer than other services to start
