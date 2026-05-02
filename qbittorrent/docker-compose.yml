@@ -29,6 +29,12 @@ services:
       - ${MOVIES_PATH}:/movies
     ports:
       - 7878:7878
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:7878/ping || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     restart: unless-stopped
 
   sonarr:
@@ -42,4 +48,10 @@ services:
       - ${SHOWS_PATH}:/shows
     ports:
       - 8989:8989
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8989/ping || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     restart: unless-stopped
