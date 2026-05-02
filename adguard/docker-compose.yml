@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  adguardhome:
+    image: adguard/adguardhome:latest
+    container_name: adguardhome
+    restart: unless-stopped
+    ports:
+      # DNS Traffic (Must stay on 53 for devices to find it)
+      - "53:53/tcp"
+      - "53:53/udp"
+      
+      # Web UI & Management (Prefix 53)
+      - "5380:80/tcp"   # HTTP UI: http://localhost:5380
+      - "53443:443/tcp" # HTTPS UI: https://localhost:53443
+      - "53443:443/udp" # DNS-over-QUIC
+      - "5300:3000/tcp" # Initial Setup: http://localhost:5300
+      
+      # Encrypted DNS
+      - "5353:853/tcp"  # DNS-over-TLS (Prefixed 53 + standard 53)
+    volumes:
+      - ${DOCKER_DATA_PATH}/work:/opt/adguardhome/work
+      - ${DOCKER_DATA_PATH}/conf:/opt/adguardhome/conf
+    healthcheck:
+      test: ["CMD", "nslookup", "localhost", "127.0.0.1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
