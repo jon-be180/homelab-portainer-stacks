@@ -11,8 +11,14 @@ services:
       ND_LOGLEVEL: info  
       ND_BASEURL: ${ND_BASEURL}
     volumes:
-      - ${DOCKER_DATA_PATH}/navidrome/data:/data    # Put the "brains" on your SSD
-      - D:/Music:/music:ro        # Put the "body" (music files) on your HDD
+      - ${DOCKER_DATA_PATH}/navidrome/data:/data
+      - ${DOCKER_MUUSIC_PATH}:/music:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:4533/ping || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
     
   cloudflared-music:
     container_name: navidrome_cloudflared
@@ -21,3 +27,6 @@ services:
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     command: tunnel run
+    depends_on:
+      navidrome:
+        condition: service_healthy
