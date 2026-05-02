@@ -27,9 +27,16 @@ services:
       - ${DOCKER_DATA_PATH}\tdarr\configs:/app/configs
       - ${DOCKER_DATA_PATH}\tdarr\logs:/app/logs
       # Your Media Libraries
-      - D:\Movies:/media/movies
-      - D:\Shows:/media/shows
+      - ${MOVIES_PATH}:/media/movies
+      - ${SHOWS_PATH}:/media/shows
 
       # --- HIGH SPEED CACHE (C: Drive NVMe) ---
       # This is the "Work Bench" where the heavy lifting happens
       - ${DOCKER_DATA_PATH}\tdarr\transcode_cache:/temp
+    healthcheck:
+      # We check the Server port (8266) internally
+      test: ["CMD", "curl", "-f", "http://localhost:8266/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
