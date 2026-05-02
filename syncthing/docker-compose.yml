@@ -21,7 +21,7 @@ services:
     networks:
       - sync-internal
     healthcheck:
-      test: ["CMD", "curl", "-fk", "https://localhost:8384/rest/system/ping"]
+      test: ["CMD", "curl", "-fk", "http://localhost:8384/rest/system/ping"]
       interval: 1m
       timeout: 10s
       retries: 3
@@ -50,7 +50,7 @@ services:
         limits:
           memory: 512M
     healthcheck:
-      test: ["CMD", "curl", "-fk", "https://localhost:8385/rest/system/ping"]
+      test: ["CMD", "curl", "-fk", "http://localhost:8385/rest/system/ping"]
       interval: 1m
       timeout: 10s
       retries: 3
