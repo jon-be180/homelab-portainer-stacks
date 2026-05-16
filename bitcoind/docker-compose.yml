@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  bitcoind:
+    image: lncm/bitcoind:v26.0
+    container_name: bitcoin_node
+    restart: unless-stopped
+    ports:
+      - "8333:8333"  # Mainnet P2P
+      - "8332:8332"  # RPC Port for Zeus / Portainer connections
+    volumes:
+      # Main data directory on the SSD (D:) to keep the UTXO database fast
+      - ${BITCOIN_DATA_PATH}:/data
+      # Massive block storage offloaded to the HDD (E:)
+      - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks
+    environment:
+      - BITCOIN_RPC_USER=${BITCOIN_RPC_USER}
+      - BITCOIN_RPC_PASSWORD=${BITCOIN_RPC_PASSWORD}
+    command:
+      - -mainnet=1
+      - -server=1
+      - -txindex=0             # Keep disabled! TX index on an HDD path will stall.
+      - -prune=5000            # Keeps total block storage limited to ~5GB to save HDD wear
+      - -dbcache=8192          # Allocates 8GB RAM to cache database writes in memory (Crucial)
+      - -rpcuser=${BITCOIN_RPC_USER}
+      - -rpcpassword=${BITCOIN_RPC_PASSWORD}
+      - -rpcallowip=0.0.0.0/0  # Allows connections from your local network
+      - -rpcbind=0.0.0.0       # Binds RPC to all network interfaces
