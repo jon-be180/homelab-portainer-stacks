@@ -9,7 +9,7 @@ services:
       - "8333:8333"  # Mainnet P2P
       - "8332:8332"  # RPC Port for Zeus / Portainer connections
     volumes:
-      # Main data directory on the SSD (D:) to keep the UTXO database fast
+      # Main data directory on the SSD (D:)
       - ${BITCOIN_DATA_PATH}:/data
       # Massive block storage offloaded to the HDD (E:)
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks
@@ -17,7 +17,7 @@ services:
       - BITCOIN_RPC_USER=${BITCOIN_RPC_USER}
       - BITCOIN_RPC_PASSWORD=${BITCOIN_RPC_PASSWORD}
     command:
-      - -mainnet=1
+      - -mainnet               # FIXED: Removed '=1' parser breaker
       - -server=1
       - -txindex=0             # Keep disabled! TX index on an HDD path will stall.
       - -prune=5000            # Keeps total block storage limited to ~5GB to save HDD wear
@@ -27,7 +27,8 @@ services:
       - -rpcallowip=0.0.0.0/0  # Allows connections from your local network
       - -rpcbind=0.0.0.0       # Binds RPC to all network interfaces
     healthcheck:
-      test: ["CMD", "bitcoin-cli", "-rpcuser=${BITCOIN_RPC_USER}", "-rpcpassword=${BITCOIN_RPC_PASSWORD}", "getblockchaininfo"]
+      # FIXED: Switched to CMD-SHELL and escaped variables using $$ so the container evaluates them at runtime
+      test: ["CMD-SHELL", "bitcoin-cli -rpcuser=$$BITCOIN_RPC_USER -rpcpassword=$$BITCOIN_RPC_PASSWORD getblockchaininfo"]
       interval: 30s
       timeout: 10s
       retries: 3
