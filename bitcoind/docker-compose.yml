@@ -26,7 +26,7 @@ services:
       - -rpcpassword=${BITCOIN_RPC_PASSWORD}
       - -rpcallowip=0.0.0.0/0  # Allows connections from your local network
       - -rpcbind=0.0.0.0       # Binds RPC to all network interfaces
-healthcheck:
+  healthcheck:
       test: ["CMD", "bitcoin-cli", "-rpcuser=${BITCOIN_RPC_USER}", "-rpcpassword=${BITCOIN_RPC_PASSWORD}", "getblockchaininfo"]
       interval: 30s
       timeout: 10s
