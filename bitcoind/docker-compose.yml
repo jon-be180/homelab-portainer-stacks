@@ -13,7 +13,7 @@ services:
       - ${BITCOIN_DATA_PATH}:/data
       # Massive block storage offloaded to the HDD (E:)
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks
-      - ${BITCOIN_DOTFILE_DATA_PATH}:/data/.bitcoin
+      - ${BITCOIN_DOTFILE_DATA_PATH}:/data/.bitcoin2
     environment:
       - BITCOIN_RPC_USER=${BITCOIN_RPC_USER}
       - BITCOIN_RPC_PASSWORD=${BITCOIN_RPC_PASSWORD}
