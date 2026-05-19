@@ -1,15 +1,19 @@
-bitcoind:
+version: '3.8'
+
+services:
+  bitcoind:
     image: lncm/bitcoind:v26.0
     container_name: bitcoin_node
     restart: unless-stopped
     ports:
-      - "8333:8333"
-      - "8332:8332"
-    # Bumped to 8000 since you have 16GB total and are doing a full txindex sync!
+      - "8333:8333"  # Mainnet P2P
+      - "8332:8332"  # RPC Port for Zeus / Portainer connections
     command:
-      - -dbcache=4000
+      - "-dbcache=8000"
     volumes:
+      # Main data directory on the SSD (D:)
       - ${BITCOIN_DATA_PATH}:/data
+      # Massive block storage offloaded to the HDD (E:)
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks
       - ${BITCOIN_DOTFILE_DATA_PATH}:/data/.bitcoin
     environment:
