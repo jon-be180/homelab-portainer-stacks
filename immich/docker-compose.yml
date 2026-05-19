@@ -23,9 +23,6 @@ services:
       - ${EXTERNAL_PHOTOS}:/external-photos:ro
     ports:
       - '2283:2283'
-    depends_on:
-      - redis
-      - database
     restart: always
     healthcheck:
       test: ["CMD", "immich-admin", "ping"]
