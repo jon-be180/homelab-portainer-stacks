@@ -28,7 +28,11 @@ services:
       - database
     restart: always
     healthcheck:
-      disable: false
+      test: ["CMD", "immich-admin", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   immich-machine-learning:
     container_name: immich_machine_learning
@@ -42,14 +46,21 @@ services:
       - model-cache:/cache
     restart: always
     healthcheck:
-      disable: false
+      test: ["CMD", "curl", "-f", "http://localhost:3003/v1/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s # Gives ML models extra time to load into RAM/Cache on startup
 
   redis:
     container_name: immich_redis
     image: docker.io/redis:6.2-alpine@sha256:148bb5411c184abd288d9aaed139c98123eeb8824c5d3fce03cf721db58066d8
-    healthcheck:
-      test: redis-cli ping || exit 1
     restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   database:
     container_name: immich_postgres
@@ -79,6 +90,12 @@ services:
     command: tunnel run
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/2000 && echo -e 'GET /ready HTTP/1.1\r\nHost: localhost\r\n\r\n' >&3 && grep -q '200 OK' <&3"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
     
 volumes:
   model-cache:
