@@ -11,7 +11,6 @@ services:
     environment:
       - TZ=America/Guatemala
       - SET_SERVER_NAME=Jon-Media-Server
-    # Fixed: Uses native Nginx process matching since curl isn't available in the image
     healthcheck:
       test: ["CMD-SHELL", "pidof nginx || exit 1"]
       interval: 30s
@@ -23,16 +22,16 @@ services:
     container_name: openspeedtest_cloudflared
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
-    # Fixed: Corrected metrics argument syntax to bind to an internal port
-    command: tunnel --metrics localhost:2000 run
+    # Changed: Removed the custom metrics flag since we are using cloudflared's native check command
+    command: tunnel run
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     depends_on:
       openspeedtest:
         condition: service_healthy
-    # Fixed: Reliable socket health check that queries actual tunnel edge connectivity
+    # Fixed: Uses cloudflared's native diagnostic tool inside the container to safely check connection health
     healthcheck:
-      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/2000 && echo -e 'GET /ready HTTP/1.1\r\nHost: localhost\r\n\r\n' >&3 && grep -q '200 OK' <&3"]
+      test: ["CMD", "cloudflared", "tunnel", "status"]
       interval: 30s
       timeout: 10s
       retries: 3
