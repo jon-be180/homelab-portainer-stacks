@@ -5,6 +5,8 @@ services:
     image: adguard/adguardhome:latest
     container_name: adguardhome
     restart: unless-stopped
+    environment:
+      - TZ=${TZ:-America/Guatemala}
     ports:
       # DNS Traffic (Must stay on 53 for devices to find it)
       - "53:53/tcp"
