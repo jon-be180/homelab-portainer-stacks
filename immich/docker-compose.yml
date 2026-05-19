@@ -1,7 +1,3 @@
-# WARNING: To install Immich, follow our guide: https://immich.app/docs/install/docker-compose
-# Make sure to use the docker-compose.yml of the current release:
-# https://github.com/immich-app/immich/releases/latest/download/docker-compose.yml
-
 name: immich
 
 services:
@@ -17,13 +13,18 @@ services:
     restart: always
     networks:
       - immich-net
-    # 1. Temporarily relaxed so a slow boot doesn't crash Portainer's deployment sequence
     depends_on:
-      - redis
-      - database
-    # 2. Disabled healthcheck temporarily so the container stays up for debugging
+      redis:
+        condition: service_healthy
+      database:
+        condition: service_healthy
+    # Re-enabled: Server check is safe to track now
     healthcheck:
-      disable: true
+      test: ["CMD", "immich-admin", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   immich-machine-learning:
     container_name: immich_machine_learning
@@ -33,16 +34,17 @@ services:
     restart: always
     networks:
       - immich-net
+    # Fixed: Uses native python sockets to test port 3003 so we don't need 'curl'
+    # Also bumped start_period to 3 minutes to allow heavy ML models to download on WSL2
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3003/v1/ping"]
+      test: ["CMD-SHELL", "python3 -c 'import socket; s = socket.socket(); s.settimeout(2); s.connect((\"127.0.0.1\", 3003))' || exit 1"]
       interval: 30s
-      timeout: 10s
+      timeout: 5s
       retries: 3
-      start_period: 60s
+      start_period: 3m
 
   redis:
     container_name: immich_redis
-    # Updated: Swapped out the old fixed-hash version for standard latest alpine distribution
     image: docker.io/redis:alpine
     restart: always
     networks:
@@ -88,7 +90,8 @@ services:
     networks:
       - immich-net
     depends_on:
-      - immich-server
+      immich-server:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "cloudflared", "tunnel", "admin", "http://localhost:2000/ready"]
       interval: 30s
