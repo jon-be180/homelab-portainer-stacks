@@ -17,17 +17,13 @@ services:
     restart: always
     networks:
       - immich-net
+    # 1. Temporarily relaxed so a slow boot doesn't crash Portainer's deployment sequence
     depends_on:
-      redis:
-        condition: service_healthy
-      database:
-        condition: service_healthy
+      - redis
+      - database
+    # 2. Disabled healthcheck temporarily so the container stays up for debugging
     healthcheck:
-      test: ["CMD", "immich-admin", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 4
-      start_period: 90s # Increased to give migrations room to settle over the custom network
+      disable: true
 
   immich-machine-learning:
     container_name: immich_machine_learning
@@ -46,7 +42,8 @@ services:
 
   redis:
     container_name: immich_redis
-    image: docker.io/redis:6.2-alpine@sha256:148bb5411c184abd288d9aaed139c98123eeb8824c5d3fce03cf721db58066d8
+    # Updated: Swapped out the old fixed-hash version for standard latest alpine distribution
+    image: docker.io/redis:alpine
     restart: always
     networks:
       - immich-net
@@ -85,15 +82,13 @@ services:
     container_name: immich_cloudflared
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
-    # Fixed: Re-added the metrics server declaration so the port 2000 healthcheck actually responds
     command: tunnel --metrics localhost:2000 run
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     networks:
       - immich-net
     depends_on:
-      immich-server:
-        condition: service_healthy
+      - immich-server
     healthcheck:
       test: ["CMD", "cloudflared", "tunnel", "admin", "http://localhost:2000/ready"]
       interval: 30s
@@ -104,7 +99,6 @@ services:
 volumes:
   model-cache:
 
-# Fixed: Added the explicit network bridge layer required for internal service inter-communication
 networks:
   immich-net:
     driver: bridge
