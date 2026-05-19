@@ -17,17 +17,13 @@ services:
     restart: always
     networks:
       - immich-net
+    # 1. Temporarily relaxed so a slow boot doesn't crash Portainer's deployment sequence
     depends_on:
-      redis:
-        condition: service_healthy
-      database:
-        condition: service_healthy
+      - redis
+      - database
+    # 2. Disabled healthcheck temporarily so the container stays up for debugging
     healthcheck:
-      test: ["CMD", "immich-admin", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+      disable: true
 
   immich-machine-learning:
     container_name: immich_machine_learning
@@ -37,13 +33,16 @@ services:
     restart: always
     networks:
       - immich-net
-    # Fixed: Removed the ping check string entirely. The application will track its own background threads,
-    # ensuring Portainer flags it with a clean green status indicator.
     healthcheck:
-      disable: true
+      test: ["CMD", "curl", "-f", "http://localhost:3003/v1/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
   redis:
     container_name: immich_redis
+    # Updated: Swapped out the old fixed-hash version for standard latest alpine distribution
     image: docker.io/redis:alpine
     restart: always
     networks:
@@ -89,8 +88,7 @@ services:
     networks:
       - immich-net
     depends_on:
-      immich-server:
-        condition: service_healthy
+      - immich-server
     healthcheck:
       test: ["CMD", "cloudflared", "tunnel", "admin", "http://localhost:2000/ready"]
       interval: 30s
