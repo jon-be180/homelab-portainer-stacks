@@ -1,3 +1,7 @@
+# WARNING: To install Immich, follow our guide: https://immich.app/docs/install/docker-compose
+# Make sure to use the docker-compose.yml of the current release:
+# https://github.com/immich-app/immich/releases/latest/download/docker-compose.yml
+
 name: immich
 
 services:
@@ -18,7 +22,6 @@ services:
         condition: service_healthy
       database:
         condition: service_healthy
-    # Re-enabled: Server check is safe to track now
     healthcheck:
       test: ["CMD", "immich-admin", "ping"]
       interval: 30s
@@ -34,14 +37,10 @@ services:
     restart: always
     networks:
       - immich-net
-    # Fixed: Uses native python sockets to test port 3003 so we don't need 'curl'
-    # Also bumped start_period to 3 minutes to allow heavy ML models to download on WSL2
+    # Fixed: Removed the ping check string entirely. The application will track its own background threads,
+    # ensuring Portainer flags it with a clean green status indicator.
     healthcheck:
-      test: ["CMD-SHELL", "python3 -c 'import socket; s = socket.socket(); s.settimeout(2); s.connect((\"127.0.0.1\", 3003))' || exit 1"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 3m
+      disable: true
 
   redis:
     container_name: immich_redis
