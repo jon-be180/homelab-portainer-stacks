@@ -1,11 +1,6 @@
-#
 # WARNING: To install Immich, follow our guide: https://immich.app/docs/install/docker-compose
-#
 # Make sure to use the docker-compose.yml of the current release:
-#
 # https://github.com/immich-app/immich/releases/latest/download/docker-compose.yml
-#
-# The compose file on main may not be compatible with the latest release.
 
 name: immich
 
@@ -13,51 +8,48 @@ services:
   immich-server:
     container_name: immich_server
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
-    # extends:
-    #   file: hwaccel.transcoding.yml
-    #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
     volumes:
-      # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - ${UPLOAD_LOCATION}:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
       - ${EXTERNAL_PHOTOS}:/external-photos:ro
     ports:
       - '2283:2283'
     restart: always
-    healthcheck:
-      test: ["CMD", "immich-admin", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+    networks:
+      - immich-net
     depends_on:
       redis:
         condition: service_healthy
       database:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "immich-admin", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 4
+      start_period: 90s # Increased to give migrations room to settle over the custom network
 
   immich-machine-learning:
     container_name: immich_machine_learning
-    # For hardware acceleration, add one of -[armnn, cuda, rocm, openvino, rknn] to the image tag.
-    # Example tag: ${IMMICH_VERSION:-release}-cuda
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
-    # extends: # uncomment this section for hardware acceleration - see https://immich.app/docs/features/ml-hardware-acceleration
-    #   file: hwaccel.ml.yml
-    #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
     volumes:
       - model-cache:/cache
     restart: always
+    networks:
+      - immich-net
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3003/v1/ping"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s # Gives ML models extra time to load into RAM/Cache on startup
+      start_period: 60s
 
   redis:
     container_name: immich_redis
     image: docker.io/redis:6.2-alpine@sha256:148bb5411c184abd288d9aaed139c98123eeb8824c5d3fce03cf721db58066d8
     restart: always
+    networks:
+      - immich-net
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -73,11 +65,15 @@ services:
       POSTGRES_DB: ${DB_DATABASE_NAME}
       POSTGRES_INITDB_ARGS: '--data-checksums'
     volumes:
-      # Do not edit the next line. If you want to change the database storage location on your system, edit the value of DB_DATA_LOCATION in the .env file
       - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
+    networks:
+      - immich-net
     healthcheck:
       test: >-
-        pg_isready --dbname="$${POSTGRES_DB}" --username="$${POSTGRES_USER}" || exit 1; Chksum="$$(psql --dbname="$${POSTGRES_DB}" --username="$${POSTGRES_USER}" --tuples-only --no-align --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')"; echo "checksum failure count is $$Chksum"; [ "$$Chksum" = '0' ] || exit 1
+        pg_isready --dbname="$${POSTGRES_DB}" --username="$${POSTGRES_USER}" || exit 1; 
+        Chksum="$$(psql --dbname="$${POSTGRES_DB}" --username="$${POSTGRES_USER}" --tuples-only --no-align --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')"; 
+        echo "checksum failure count is $$Chksum"; 
+        [ "$$Chksum" = '0' ] || exit 1
       interval: 5m
       start_interval: 30s
       start_period: 5m
@@ -87,21 +83,28 @@ services:
 
   cloudflared:
     container_name: immich_cloudflared
-    image: cloudflare/cloudflared
+    image: cloudflare/cloudflared:latest
     restart: unless-stopped
-    command: tunnel run
+    # Fixed: Re-added the metrics server declaration so the port 2000 healthcheck actually responds
+    command: tunnel --metrics localhost:2000 run
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - immich-net
+    depends_on:
+      immich-server:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/2000 && echo -e 'GET /ready HTTP/1.1\r\nHost: localhost\r\n\r\n' >&3 && grep -q '200 OK' <&3"]
+      test: ["CMD", "cloudflared", "tunnel", "admin", "http://localhost:2000/ready"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 15s
-    depends_on:
-      immich-server:
-        condition: service_healthy
     
 volumes:
   model-cache:
 
+# Fixed: Added the explicit network bridge layer required for internal service inter-communication
+networks:
+  immich-net:
+    driver: bridge
