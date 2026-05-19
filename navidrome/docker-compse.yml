@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   navidrome:
     image: deluan/navidrome:latest
@@ -6,7 +8,6 @@ services:
       - "4533:4533"
     restart: unless-stopped
     environment:
-      # Use forward slashes for Windows paths
       ND_SCANSCHEDULE: "@every 1h"
       ND_LOGLEVEL: info  
       ND_BASEURL: ${ND_BASEURL}
@@ -26,7 +27,15 @@ services:
     restart: unless-stopped
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
-    command: tunnel run
+    # 1. Added the metrics flag to expose a private local endpoint inside the container
+    command: tunnel --metrics localhost:2000 run
     depends_on:
       navidrome:
         condition: service_healthy
+    # 2. Added a working healthcheck that queries cloudflared's native local admin utility
+    healthcheck:
+      test: ["CMD", "cloudflared", "tunnel", "admin", "http://localhost:2000/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
