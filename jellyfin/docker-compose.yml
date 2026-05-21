@@ -36,7 +36,7 @@ services:
       retries: 3
       start_period: 120s # Raised from 30s to 120s to give the database time to spin up
 
-cloudflared:
+  cloudflared:
     container_name: jellyfin_cloudflared
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
