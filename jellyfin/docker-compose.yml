@@ -39,8 +39,8 @@ services:
     container_name: jellyfin_cloudflared
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
-    # Updated: Matches your working stack's command and native admin healthcheck
-    command: tunnel --metrics localhost:2000 run
+    # Fixed: Moved the metrics flag AFTER 'run' so the tunnel parses the token environment variable correctly
+    command: tunnel run --metrics localhost:2000
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     networks:
@@ -54,7 +54,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 15s
-
+      
 networks:
   jellyfin-net:
     driver: bridge
