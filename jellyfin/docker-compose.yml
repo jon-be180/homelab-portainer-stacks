@@ -28,19 +28,19 @@ services:
       resources:
         limits:
           memory: 4G
-    # Fixed: Increased startup grace period & swapped to wget fallback in case curl is absent
     healthcheck:
-      test: ["CMD-SHELL", "curl -fs http://localhost:8096/health || wget -qO- http://localhost:8096/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 120s # Raised from 30s to 120s to give the database time to spin up
+      test: ["CMD-SHELL", "nc -z localhost 8096 || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
 
   cloudflared:
     container_name: jellyfin_cloudflared
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
-    command: tunnel --metrics 0.0.0.0:2000 run
+    # Updated: Matches your working stack's command and native admin healthcheck
+    command: tunnel --metrics localhost:2000 run
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     networks:
@@ -48,9 +48,8 @@ services:
     depends_on:
       jellyfin:
         condition: service_healthy
-    # Fixed: Swapped to an alpine-compliant wget command that hits the metrics endpoint cleanly
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:2000/ready"]
+      test: ["CMD", "cloudflared", "tunnel", "admin", "http://localhost:2000/ready"]
       interval: 30s
       timeout: 10s
       retries: 3
