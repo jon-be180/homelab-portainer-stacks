@@ -82,15 +82,16 @@ services:
     container_name: immich_cloudflared
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
-    command: tunnel --metrics localhost:2000 run
+    command: tunnel run
     environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN
+      - TUNNEL_METRICS=0.0.0.0:60123 # Enables metrics
     networks:
       - immich-net
     depends_on:
       - immich-server
     healthcheck:
-      test: ["CMD", "cloudflared", "tunnel", "admin", "http://localhost:2000/ready"]
+      test: ["CMD", "cloudflared", "tunnel", "ready"]
       interval: 30s
       timeout: 10s
       retries: 3
