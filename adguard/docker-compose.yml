@@ -25,7 +25,7 @@ services:
       - ${DOCKER_DATA_PATH}/conf:/opt/adguardhome/conf
       - ${DOCKER_DATA_BACKUP_DIR}:/opt/adguardhome/backups
     healthcheck:
-      test: ["CMD", "nslookup", "localhost", "127.0.0.1"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:80/"]
       interval: 30s
       timeout: 10s
       retries: 3
