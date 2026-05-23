@@ -56,7 +56,7 @@ services:
       start_period: 40s
     restart: unless-stopped
 
-tdarr_server:
+  tdarr_server:
     container_name: tdarr
     image: ghcr.io/haveagitgat/tdarr:latest
     restart: unless-stopped
