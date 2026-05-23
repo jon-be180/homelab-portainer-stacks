@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  jellyfin:
+  jellyfin_server:
     container_name: jellyfin
     image: lscr.io/linuxserver/jellyfin:latest
     volumes:
@@ -35,7 +35,7 @@ services:
       retries: 5
       start_period: 60s
 
-  cloudflared:
+  jellyfin_cloudflared:
     container_name: jellyfin_cloudflared
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
