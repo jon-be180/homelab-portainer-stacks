@@ -1,5 +1,5 @@
 services:
-  immich-server:
+  immich_server:
     container_name: immich_server
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
     volumes:
@@ -25,7 +25,7 @@ services:
       retries: 3
       start_period: 60s
 
-  immich-machine-learning:
+  immich_machinelearning:
     container_name: immich_machine_learning
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
     volumes:
@@ -40,7 +40,7 @@ services:
       retries: 3
       start_period: 60s
 
-  redis:
+  immich_redis:
     container_name: immich_redis
     # Updated: Swapped out the old fixed-hash version for standard latest alpine distribution
     image: docker.io/redis:alpine
@@ -53,8 +53,8 @@ services:
       timeout: 5s
       retries: 5
 
-  database:
-    container_name: immich_postgres
+  immich_database:
+    container_name: immich_database
     image: docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:739cdd626151ff1f796dc95a6591b55a714f341c737e27f045019ceabf8e8c52
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -78,7 +78,7 @@ services:
       postgres -c shared_preload_libraries=vectors.so -c 'search_path="$$user", public, vectors' -c logging_collector=on -c max_wal_size=2GB -c shared_buffers=512MB -c wal_compression=on
     restart: always
 
-  cloudflared:
+  immich_cloudflared:
     container_name: immich_cloudflared
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
