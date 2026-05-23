@@ -1,5 +1,5 @@
 services:
-  homeassistant:
+  homeassistant_server:
     container_name: homeassistant
     image: "homeassistant/home-assistant:latest"
     volumes:
