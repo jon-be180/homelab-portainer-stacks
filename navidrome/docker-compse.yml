@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  navidrome:
+  navidrome_server:
     image: deluan/navidrome:latest
     container_name: navidrome
     ports:
@@ -21,7 +21,7 @@ services:
       retries: 3
       start_period: 10s
     
-  cloudflared-music:
+  navidrome_cloudflared:
     container_name: navidrome_cloudflared
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
