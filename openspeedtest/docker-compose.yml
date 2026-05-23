@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-  openspeedtest:
+  openspeedtest_server:
     image: openspeedtest/latest:latest
     container_name: openspeedtest
     restart: unless-stopped
@@ -18,7 +16,7 @@ services:
       retries: 3
       start_period: 5s
 
-  cloudflared:
+  openspeedtest_cloudflared:
     container_name: openspeedtest_cloudflared
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
