@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  syncthing-ssd:
+  syncthing_ssd_server:
     image: syncthing/syncthing:latest
     container_name: syncthing-ssd
     hostname: syncthing-ssd
@@ -27,7 +27,7 @@ services:
       retries: 3
 
   # Instance 2: The "Backup" on your Spinning Drive
-  syncthing-hdd:
+  syncthing_hdd_server:
     image: syncthing/syncthing:latest
     container_name: syncthing-hdd
     hostname: syncthing-hdd
