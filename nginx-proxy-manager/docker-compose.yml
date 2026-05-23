@@ -55,6 +55,5 @@ services:
       - nginx-proxy-manager
 
 networks:
-  proxy-tier:
-    name: proxy-tier
-    driver: bridge
+  proxy_frontend:
+    external: true
