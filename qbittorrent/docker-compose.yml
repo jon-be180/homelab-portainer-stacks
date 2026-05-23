@@ -56,40 +56,37 @@ services:
       start_period: 40s
     restart: unless-stopped
 
-  tdarr_server:
+tdarr_server:
     container_name: tdarr
     image: ghcr.io/haveagitgat/tdarr:latest
     restart: unless-stopped
     ports:
       - "9425:8265" # WebUI
       - "9426:8266" # Server
-      - "9427:8267" # Internal Node Sync (Crucial for UI)
+      - "9427:8267" # Internal Node Sync
     environment:
       - TZ=UTC
       - PUID=1000
       - PGID=1000
       - UMASK_SET=002
-      - serverIP=0.0.0.0        # Keep this at 0.0.0.0 for Docker
-      - serverPort=8266        # Back to internal port
-      - webUIPort=8265         # Back to internal port
+      - serverIP=0.0.0.0
+      - serverPort=8266
+      - webUIPort=8265
       - internalNode=true
       - inContainer=true
       - nodeName=MainNode
     volumes:
-      # --- BULK STORAGE (D: Drive) ---
-      # Keeping app data organized with your other projects
-      - ${DOCKER_DATA_PATH}\tdarr\server:/app/server
-      - ${DOCKER_DATA_PATH}\tdarr\configs:/app/configs
-      - ${DOCKER_DATA_PATH}\tdarr\logs:/app/logs
+      # --- BULK STORAGE ---
+      - ${DOCKER_DATA_PATH}/tdarr/server:/app/server
+      - ${DOCKER_DATA_PATH}/tdarr/configs:/app/configs
+      - ${DOCKER_DATA_PATH}/tdarr/logs:/app/logs
       # Your Media Libraries
       - ${MOVIES_PATH}:/media/movies
       - ${SHOWS_PATH}:/media/shows
 
-      # --- HIGH SPEED CACHE (C: Drive NVMe) ---
-      # This is the "Work Bench" where the heavy lifting happens
-      - ${DOCKER_DATA_PATH}\tdarr\transcode_cache:/temp
+      # --- HIGH SPEED CACHE ---
+      - ${DOCKER_DATA_PATH}/tdarr/transcode_cache:/temp
     healthcheck:
-      # We check the Server port (8266) internally
       test: ["CMD", "curl", "-f", "http://localhost:8266/"]
       interval: 30s
       timeout: 10s
