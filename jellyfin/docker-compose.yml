@@ -39,8 +39,7 @@ services:
     container_name: jellyfin_cloudflared
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
-    # Fixed: Moved the metrics flag AFTER 'run' so the tunnel parses the token environment variable correctly
-    command: tunnel run --metrics localhost:2000
+    command: tunnel run
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
       - TUNNEL_METRICS=0.0.0.0:60123 # Enables metrics
