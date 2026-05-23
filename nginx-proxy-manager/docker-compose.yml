@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  nginx-proxy-manager:
+  nginxpm_server:
     image: 'jc21/nginx-proxy-manager:latest'
     container_name: nginx-proxy-manager
     restart: unless-stopped
@@ -20,7 +20,7 @@ services:
       step-ca:
         condition: service_healthy
 
-  step-ca:
+  nginxpm_stepca:
     image: smallstep/step-ca:latest
     container_name: step-ca
     restart: unless-stopped
