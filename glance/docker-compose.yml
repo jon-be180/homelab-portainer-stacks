@@ -10,7 +10,7 @@ services:
     environment:
       - TZ=America/Guatemala
     volumes:
-      - ${GLANCE_STORAGE_PATH}/glance.yml:/etc/glance/glance.yml
+      - ${GLANCE_STORAGE_PATH}/glance.yml:/app/config/glance.yml
       - ${GLANCE_STORAGE_PATH}/assets:/etc/glance/assets
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080"]
