@@ -10,6 +10,7 @@ services:
       - "8332:8332"  # RPC Port for Zeus / Portainer connections
     command:
       - "-dbcache=8000"
+      - "-par=4"
     volumes:
       # Main data directory on the SSD (D:)
       - ${BITCOIN_DATA_PATH}:/data
