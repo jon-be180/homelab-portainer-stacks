@@ -11,6 +11,7 @@ services:
     command:
       - "-dbcache=8000"
       - "-par=4"
+      - "-assumevalid=000000000000000000021cbf3f9462615436d4df94eb6c9cf1fc2ff769e32a67"
     volumes:
       # Main data directory on the SSD (D:)
       - ${BITCOIN_DATA_PATH}:/data
