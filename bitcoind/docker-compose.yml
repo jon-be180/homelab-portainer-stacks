@@ -35,7 +35,9 @@ services:
       - --electrum-rpc-addr=0.0.0.0:50001
       - --http-addr=0.0.0.0:3002
       - --network=bitcoin
+      - --db-dir=/electrs_db
     volumes:
       - ${BITCOIN_DATA_PATH}:/data:ro       # SSD Database access (Read-Only)
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks:ro # HDD Blocks access (Read-Only)
-      - ${ELECTRS_DB_PATH}:/data/db         # Maps to E:\Docker\electrs (Fast SSD Index)
+      # Mounted outside of the read-only /data tree so it can actually write
+      - ${ELECTRS_DB_PATH}:/electrs_db
