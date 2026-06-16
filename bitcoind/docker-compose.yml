@@ -35,6 +35,10 @@ services:
       - --http-addr=0.0.0.0:3002
       - --network=bitcoin
       - --db-dir=/electrs_db
+    environment:
+      # Native environment variables used by this build for RPC authentication
+      - ELECTRUM_DAEMON_USER=${BITCOIN_RPC_USER}
+      - ELECTRUM_DAEMON_PASSWORD=${BITCOIN_RPC_PASSWORD}
     volumes:
       - ${BITCOIN_DATA_PATH}:/data:ro       # SSD Database access (Read-Only)
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks:ro # HDD Blocks access (Read-Only)
