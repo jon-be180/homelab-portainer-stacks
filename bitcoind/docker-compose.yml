@@ -30,7 +30,6 @@ services:
       - --log-filters=INFO
       - --daemon-rpc-addr=bitcoind:8332
       - --daemon-dir=/data
-      - --cookie=${BITCOIN_RPC_USER}:${BITCOIN_RPC_PASSWORD}
       - --electrum-rpc-addr=0.0.0.0:50001
       - --http-addr=0.0.0.0:3002
       - --network=bitcoin
