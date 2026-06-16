@@ -18,7 +18,7 @@ services:
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks # Maps to D:\bitcoind (Slow HDD Blocks)
 
   electrs:
-    image: lncm/electrs:v0.10.6 
+    image: jlopp/electrs:v0.10.6 
     container_name: electrs_indexer
     restart: unless-stopped
     depends_on:
