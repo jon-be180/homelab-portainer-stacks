@@ -19,8 +19,7 @@ services:
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks # Maps to D:\bitcoind (Slow HDD Blocks)
 
   electrs:
-    image: blockstream/esplora-electrs:latest # Explicitly pulling the API-enabled build
-    container_name: electrs_indexer
+    image: mempool/electrs:v3.0.3 # Completely public, API-enabled, stable image repo    container_name: electrs_indexer
     restart: unless-stopped
     depends_on:
       - bitcoind
