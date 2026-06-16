@@ -9,7 +9,7 @@ services:
       - "8333:8333"  # Mainnet P2P
       - "8332:8332"  # RPC Port for Zeus / Portainer
     command:
-      - "-dbcache=500" # Reduced now that IBD is finished
+      - "-dbcache=8000" # Reduced now that IBD is finished
       - "-par=4"
       - "-assumevalid=000000000000000000021cbf3f9462615436d4df94eb6c9cf1fc2ff769e32a67"
       - "-datadir=/data" # Tells the container to look at /data as the home directory
