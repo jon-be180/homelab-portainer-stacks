@@ -9,7 +9,7 @@ services:
       - "8333:8333"  # Mainnet P2P
       - "8332:8332"  # RPC Port
     command:
-      - "-dbcache=8000"
+      - "-dbcache=500"
       - "-par=4"
       - "-assumevalid=000000000000000000021cbf3f9462615436d4df94eb6c9cf1fc2ff769e32a67"
       # Explicitly tell bitcoind to use /data as its root home
