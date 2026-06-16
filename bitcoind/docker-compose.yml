@@ -7,17 +7,18 @@ services:
     restart: unless-stopped
     ports:
       - "8333:8333"  # Mainnet P2P
-      - "8332:8332"  # RPC Port for Zeus / Portainer connections
+      - "8332:8332"  # RPC Port
     command:
       - "-dbcache=8000"
       - "-par=4"
       - "-assumevalid=000000000000000000021cbf3f9462615436d4df94eb6c9cf1fc2ff769e32a67"
+      # Explicitly tell bitcoind to use /data as its root home
+      - "-datadir=/data" 
     volumes:
-      # Main data directory on the SSD (D:)
+      # Fast SSD data (chainstate, db, etc.)
       - ${BITCOIN_DATA_PATH}:/data
-      # Massive block storage offloaded to the HDD (E:)
+      # Slow HDD data (blocks) nested properly
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks
-      - ${BITCOIN_DOTFILE_DATA_PATH}:/data/.bitcoin
     environment:
       - BITCOIN_RPC_USER=${BITCOIN_RPC_USER}
       - BITCOIN_RPC_PASSWORD=${BITCOIN_RPC_PASSWORD}
@@ -33,20 +34,21 @@ services:
     depends_on:
       - bitcoind
     ports:
-      - "50001:50001" # Electrum RPC (for Desktop Wallets)
-      - "3002:3002"   # Esplora HTTP REST API (for Chantools / Web Explorers)
+      - "50001:50001" # Electrum RPC
+      - "3002:3002"   # Esplora HTTP REST API
     command:
       - --log-filters=INFO
       - --timestamp=true
       - --daemon-rpc-addr=bitcoind:8332
+      # Now accurately points to the mounted /data folder where blocks/ and .cookie live
       - --daemon-dir=/data
       - --cookie=${BITCOIN_RPC_USER}:${BITCOIN_RPC_PASSWORD}
       - --electrum-rpc-addr=0.0.0.0:50001
       - --http-addr=0.0.0.0:3002
       - --network=bitcoin
     volumes:
-      # Needs direct read-only access to bitcoind's data/blocks directory
+      # Mirrors bitcoind's internal structure perfectly as Read-Only
       - ${BITCOIN_DATA_PATH}:/data:ro
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks:ro
-      # Electrs needs its own dedicated DB index path (Put this on your fast SSD!)
+      # Electrs Index DB (Keep on fast SSD!)
       - ${ELECTRS_DB_PATH:-./electrs_db}:/data/db
