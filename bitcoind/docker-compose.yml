@@ -7,25 +7,15 @@ services:
     restart: unless-stopped
     ports:
       - "8333:8333"  # Mainnet P2P
-      - "8332:8332"  # RPC Port
+      - "8332:8332"  # RPC Port for Zeus / Portainer
     command:
-      - "-dbcache=500"
+      - "-dbcache=500" # Reduced now that IBD is finished
       - "-par=4"
       - "-assumevalid=000000000000000000021cbf3f9462615436d4df94eb6c9cf1fc2ff769e32a67"
-      # Explicitly tell bitcoind to use /data as its root home
-      - "-datadir=/data" 
+      - "-datadir=/data" # Tells the container to look at /data as the home directory
     volumes:
-      # Fast SSD data (chainstate, db, etc.)
-      - ${BITCOIN_DATA_PATH}:/data
-      # Slow HDD data (blocks) nested properly
-      - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks
-    environment:
-      - BITCOIN_RPC_USER=${BITCOIN_RPC_USER}
-      - BITCOIN_RPC_PASSWORD=${BITCOIN_RPC_PASSWORD}
-      - BITCOIN_TXINDEX=1
-      - BITCOIN_SERVER=1
-      - BITCOIN_RPCBIND=0.0.0.0
-      - BITCOIN_RPCALLOWIP=0.0.0.0/0
+      - ${BITCOIN_DATA_PATH}:/data          # Maps to E:\Docker\bitcoind (Fast SSD)
+      - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks # Maps to D:\bitcoind (Slow HDD Blocks)
 
   electrs:
     image: romanz/electrs:v0.10.6
@@ -40,15 +30,12 @@ services:
       - --log-filters=INFO
       - --timestamp=true
       - --daemon-rpc-addr=bitcoind:8332
-      # Now accurately points to the mounted /data folder where blocks/ and .cookie live
       - --daemon-dir=/data
       - --cookie=${BITCOIN_RPC_USER}:${BITCOIN_RPC_PASSWORD}
       - --electrum-rpc-addr=0.0.0.0:50001
       - --http-addr=0.0.0.0:3002
       - --network=bitcoin
     volumes:
-      # Mirrors bitcoind's internal structure perfectly as Read-Only
-      - ${BITCOIN_DATA_PATH}:/data:ro
-      - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks:ro
-      # Electrs Index DB (Keep on fast SSD!)
-      - ${ELECTRS_DB_PATH:-./electrs_db}:/data/db
+      - ${BITCOIN_DATA_PATH}:/data:ro       # SSD Database access (Read-Only)
+      - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks:ro # HDD Blocks access (Read-Only)
+      - ${ELECTRS_DB_PATH}:/data/db         # Maps to E:\Docker\electrs (Fast SSD Index)
