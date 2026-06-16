@@ -28,7 +28,6 @@ services:
       - "3002:3002"   # Esplora HTTP REST API
     command:
       - --log-filters=INFO
-      - --timestamp=true
       - --daemon-rpc-addr=bitcoind:8332
       - --daemon-dir=/data
       - --cookie=${BITCOIN_RPC_USER}:${BITCOIN_RPC_PASSWORD}
