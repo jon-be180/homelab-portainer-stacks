@@ -29,7 +29,7 @@ services:
       - --daemon-dir=/data
       - --electrum-rpc-addr=0.0.0.0:50001
       - --http-addr=0.0.0.0:3002              
-      - --network=bitcoin
+      - --network=mainnet # <-- Changed from "bitcoin" to "mainnet"
       - --db-dir=/electrs_db
     volumes:
       - ${BITCOIN_DATA_PATH}:/data:ro       # SSD Database access (Read-Only)
