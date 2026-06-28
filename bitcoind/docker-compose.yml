@@ -24,7 +24,7 @@ services:
     ports:
       - "50001:50001" # Electrum RPC
       - "3002:3002"   # Esplora HTTP REST API (Required for Chantools)
-command:
+    command:
       - --daemon-rpc-addr=bitcoind:8332
       - --daemon-dir=/data
       - --electrum-rpc-addr=0.0.0.0:50001
