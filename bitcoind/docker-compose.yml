@@ -9,11 +9,34 @@ services:
       - "8333:8333"  # Mainnet P2P
       - "8332:8332"  # RPC Port for Zeus / Portainer
     command:
-      - "-dbcache=8000" # Reduced now that IBD is finished
+      - "-dbcache=500" # Reduced now that IBD is finished
       - "-par=4"
       - "-assumevalid=000000000000000000021cbf3f9462615436d4df94eb6c9cf1fc2ff769e32a67"
       - "-datadir=/data" # Tells the container to look at /data as the home directory
-      - "-reindex-chainstate=0"
     volumes:
       - ${BITCOIN_DATA_PATH}:/data          # Maps to E:\Docker\bitcoind (Fast SSD)
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks # Maps to D:\bitcoind (Slow HDD Blocks)
+  electrs:
+    image: mempool/electrs:v3.0.3 
+    container_name: electrs_indexer
+    restart: unless-stopped
+    depends_on:
+      - bitcoind
+    ports:
+      - "50001:50001" # Electrum RPC
+      - "3002:3002"   # Esplora HTTP REST API (Required for Chantools)
+    command:
+      - --log-filters=INFO
+      - --daemon-rpc-addr=bitcoind:8332
+      - --daemon-dir=/data
+      - --electrum-rpc-addr=0.0.0.0:50001
+      - --http-addr=0.0.0.0:3002              
+      - --network=bitcoin
+      - --db-dir=/electrs_db
+      # Added these two lines to pass credentials cleanly to the electrs binary:
+      - --daemon-user=${BITCOIN_RPC_USER}
+      - --daemon-password=${BITCOIN_RPC_PASSWORD}
+    volumes:
+      - ${BITCOIN_DATA_PATH}:/data:ro       # SSD Database access (Read-Only)
+      - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks:ro # HDD Blocks access (Read-Only)
+      - ${ELECTRS_DB_PATH}:/electrs_db       # Maps to E:\Docker\electrs (Writable SSD Index)
