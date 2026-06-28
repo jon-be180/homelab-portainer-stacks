@@ -18,8 +18,7 @@ services:
       - ${BITCOIN_DATA_PATH}:/data          # Maps to E:\Docker\bitcoind (Fast SSD)
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks # Maps to D:\bitcoind (Slow HDD Blocks)
   electrs:
-    image: mempool/electrs:v0.10.6 # <-- Fixed the version tag here    container_name: electrs_indexer
-    restart: unless-stopped
+    image: mempool/electrs:latest # <-- Swapped to :latest to guarantee a successful manifest pull    restart: unless-stopped
     depends_on:
       - bitcoind
     ports:
