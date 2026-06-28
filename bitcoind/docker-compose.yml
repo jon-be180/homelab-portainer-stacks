@@ -24,16 +24,14 @@ services:
     ports:
       - "50001:50001" # Electrum RPC
       - "3002:3002"   # Esplora HTTP REST API (Required for Chantools)
-    command:
+command:
       - --daemon-rpc-addr=bitcoind:8332
       - --daemon-dir=/data
       - --electrum-rpc-addr=0.0.0.0:50001
       - --http-addr=0.0.0.0:3002              
       - --network=bitcoin
       - --db-dir=/electrs_db
-      # Added these two lines to pass credentials cleanly to the electrs binary:
-      - --daemon-user=${BITCOIN_RPC_USER}
-      - --daemon-password=${BITCOIN_RPC_PASSWORD}
+      # Removed the invalid credential arguments completely
     volumes:
       - ${BITCOIN_DATA_PATH}:/data:ro       # SSD Database access (Read-Only)
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks:ro # HDD Blocks access (Read-Only)
