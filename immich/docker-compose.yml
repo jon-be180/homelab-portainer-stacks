@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   immich_server:
     container_name: immich_server
@@ -12,11 +14,11 @@ services:
     networks:
       - immich-net
     depends_on:
-      redis:
+      immich_redis: # Fixed: was "redis"
         condition: service_healthy
-      database:
+      immich_database: # Fixed: was "database"
         condition: service_healthy
-      immich-machine-learning:
+      immich_machinelearning: # Fixed: was "immich-machine-learning"
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "timeout 1s bash -c ': </dev/tcp/127.0.0.1/2283' || exit 1"]
@@ -42,7 +44,6 @@ services:
 
   immich_redis:
     container_name: immich_redis
-    # Updated: Swapped out the old fixed-hash version for standard latest alpine distribution
     image: docker.io/redis:alpine
     restart: always
     networks:
@@ -85,11 +86,12 @@ services:
     command: tunnel run
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
-      - TUNNEL_METRICS=0.0.0.0:60123 # Enables metrics
+      - TUNNEL_METRICS=0.0.0.0:60123
     networks:
       - immich-net
     depends_on:
-      - immich-server
+      immich_server: # Fixed: was "- immich-server"
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "cloudflared", "tunnel", "ready"]
       interval: 30s
