@@ -31,7 +31,6 @@ command:
       - --http-addr=0.0.0.0:3002              
       - --network=bitcoin
       - --db-dir=/electrs_db
-      # Removed the invalid credential arguments completely
     volumes:
       - ${BITCOIN_DATA_PATH}:/data:ro       # SSD Database access (Read-Only)
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks:ro # HDD Blocks access (Read-Only)
