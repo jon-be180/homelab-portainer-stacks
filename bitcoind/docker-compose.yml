@@ -33,6 +33,7 @@ services:
       - --db-dir=/electrs_db
       - --address-search=true             # <--- CRITICAL: Forces the lookup engine to wake up
       - --cors=* # <--- Ensures chantools API queries aren't dropped
+      - -vvvv                               # <--- THIS is the native way to force full debug/info visibility
     volumes:
       - ${BITCOIN_DATA_PATH}:/data:ro       # SSD Database access (Read-Only)
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks:ro # HDD Blocks access (Read-Only)
