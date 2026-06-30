@@ -31,6 +31,8 @@ services:
       - --http-addr=0.0.0.0:3002              
       - --network=mainnet # <-- Changed from "bitcoin" to "mainnet"
       - --db-dir=/electrs_db
+      - --address-search=true             # <--- CRITICAL: Forces the lookup engine to wake up
+      - --cors=* # <--- Ensures chantools API queries aren't dropped
     volumes:
       - ${BITCOIN_DATA_PATH}:/data:ro       # SSD Database access (Read-Only)
       - ${BITCOIN_BLOCK_DATA_PATH}:/data/blocks:ro # HDD Blocks access (Read-Only)
