@@ -10,6 +10,8 @@ services:
       - ${EXTERNAL_PHOTOS}:/external-photos:ro
     ports:
       - '2283:2283'
+    environment:
+      - DB_HOSTNAME=immich_database
     restart: always
     networks:
       - immich-net
