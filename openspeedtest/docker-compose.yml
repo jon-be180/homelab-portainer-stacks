@@ -1,7 +1,7 @@
 services:
   openspeedtest_server:
     image: openspeedtest/latest:latest
-    container_name: openspeedtest
+    container_name: openspeedtest_server
     restart: unless-stopped
     ports:
       - "3080:3000" # HTTP Access
