@@ -11,9 +11,6 @@ services:
     network_mode: bridge
     ports:
       - 8123:8123 #optional
-    devices:
-      - /dev/zigbee:/dev/zigbee
-      - /dev/ttyUSB0:/dev/ttyUSB0
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8123/"]
       interval: 30s
