@@ -46,7 +46,7 @@ services:
     networks:
       - jellyfin-net
     depends_on:
-      jellyfin:
+      jellyfin_server:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "cloudflared", "tunnel", "ready"]
