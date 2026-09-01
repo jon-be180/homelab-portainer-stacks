@@ -88,6 +88,7 @@ services:
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
       - TUNNEL_METRICS=0.0.0.0:60123
+      - TUNNEL_EDGE_IP_VERSION=4
     networks:
       - immich-net
     # Removed the strict "condition: service_healthy" block from here
