@@ -28,6 +28,7 @@ services:
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN} 
       - TUNNEL_METRICS=0.0.0.0:60123
+      - TUNNEL_EDGE_IP_VERSION=4
     command: tunnel run
     depends_on:
       navidrome_server: # <-- Changed this from "navidrome" to "navidrome_server"
