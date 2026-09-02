@@ -22,7 +22,7 @@ services:
       - sync-internal
     healthcheck:
       test: ["CMD", "curl", "-fk", "http://localhost:8384/"]
-      interval: 1m
+      interval: 300s
       timeout: 10s
       retries: 3
 
@@ -51,7 +51,7 @@ services:
           memory: 512M
     healthcheck:
       test: ["CMD", "curl", "-fk", "http://localhost:8384/"]
-      interval: 1m
+      interval: 300s
       timeout: 10s
       retries: 3
 
