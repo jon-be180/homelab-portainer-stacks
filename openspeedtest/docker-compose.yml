@@ -11,7 +11,7 @@ services:
       - SET_SERVER_NAME=Jon-Media-Server
     healthcheck:
       test: ["CMD-SHELL", "pidof nginx || exit 1"]
-      interval: 30s
+      interval: 300s
       timeout: 5s
       retries: 3
       start_period: 5s
@@ -31,7 +31,7 @@ services:
     # Fixed: Uses cloudflared's native diagnostic tool inside the container to safely check connection health
     healthcheck:
       test: ["CMD", "cloudflared", "tunnel", "ready"]
-      interval: 30s
+      interval: 300s
       timeout: 10s
       retries: 3
       start_period: 15s
