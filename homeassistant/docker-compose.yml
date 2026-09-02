@@ -13,7 +13,7 @@ services:
       - 8123:8123 #optional
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8123/"]
-      interval: 30s
+      interval: 300s
       timeout: 10s
       retries: 3
       start_period: 60s # It takes longer than other services to start
