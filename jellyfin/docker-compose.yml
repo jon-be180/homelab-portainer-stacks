@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile    
-    image: jellyfin-rffmpeg:latest
+    image: jellyfin-rffmpeg:local
     volumes:
       - ${DOCKER_DATA_PATH}/jellyfin/config:/config
       - ${DOCKER_DATA_PATH}/jellyfin/cache:/cache
