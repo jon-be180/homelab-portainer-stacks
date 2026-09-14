@@ -1,27 +1,17 @@
 FROM lscr.io/linuxserver/jellyfin:latest
 
-# Bypass PEP 668 restrictions on Debian/Ubuntu
-ENV PIP_BREAK_SYSTEM_PACKAGES=1
-
-# Step 1: Update package list
-RUN apt-get update
-
-# Step 2: Install system dependencies including build tools, git, and python-yaml
-RUN apt-get install -y --no-install-recommends \
+# Install python3, yaml support, openssh, and curl
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
-    python3-pip \
-    python3-setuptools \
-    python3-wheel \
     python3-yaml \
-    git \
     openssh-client \
-    netcat-openbsd
+    netcat-openbsd \
+    curl && \
+    rm -rf /var/lib/apt/lists/*
 
-# Step 3: Install rffmpeg directly from the official Jellyfin repository
-RUN pip3 install --no-cache-dir git+https://github.com/jellyfin/rffmpeg.git
+# Download rffmpeg binary directly into PATH from joshuaboniface/rffmpeg
+RUN curl -fsSL https://raw.githubusercontent.com/joshuaboniface/rffmpeg/master/rffmpeg -o /usr/local/bin/rffmpeg && \
+    chmod +x /usr/local/bin/rffmpeg
 
-# Step 4: Initialize rffmpeg configuration directory
-RUN rffmpeg init
-
-# Step 5: Clean up apt cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Create the configuration directory expected by rffmpeg
+RUN mkdir -p /etc/rffmpeg
