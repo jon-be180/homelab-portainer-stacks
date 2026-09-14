@@ -3,8 +3,9 @@ version: '3.8'
 services:
   jellyfin_server:
     container_name: jellyfin
-    build: .
-    image: jellyfin-rffmpeg:latest
+    build:
+      context: .
+      dockerfile: Dockerfile    image: jellyfin-rffmpeg:latest
     volumes:
       - ${DOCKER_DATA_PATH}/jellyfin/config:/config
       - ${DOCKER_DATA_PATH}/jellyfin/cache:/cache
@@ -16,7 +17,7 @@ services:
       - ${DOCKER_DATA_PATH}/jellyfin/jellyfin_id_ed25519:/root/.ssh/id_ed25519:ro
       # Local rffmpeg configuration
       - ${DOCKER_DATA_PATH}/jellyfin/rffmpeg.yml:/etc/rffmpeg/rffmpeg.yml:ro
-environment:
+    environment:
       - PUID=1000
       - PGID=1000
       - TZ=America/Guatemala
@@ -29,8 +30,6 @@ environment:
       - 8920:8920
       - 7359:7359/udp
       - 1900:1900/udp
-    devices:
-      - /dev/dxg:/dev/dxg
     extra_hosts:
       - "host.docker.internal:host-gateway"
     deploy:
