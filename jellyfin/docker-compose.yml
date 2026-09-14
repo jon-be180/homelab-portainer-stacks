@@ -3,9 +3,7 @@ version: '3.8'
 services:
   jellyfin_server:
     container_name: jellyfin
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     image: jellyfin-rffmpeg:latest
     volumes:
       - ${DOCKER_DATA_PATH}/jellyfin/config:/config
