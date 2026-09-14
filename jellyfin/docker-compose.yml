@@ -9,6 +9,12 @@ services:
       - ${DOCKER_DATA_PATH}/jellyfin/cache:/cache
       - ${SHOWS_PATH}:/shows
       - ${MOVIES_PATH}:/movies
+      # Shared transcode directory on E: drive
+      - E:\jellyfin_transcode:/transcode
+      # SSH key for passwordless authentication to Windows host
+      - E:\Docker\host_ssh\jellyfin_id_ed25519:/root/.ssh/id_ed25519:ro
+      # Local rffmpeg configuration
+      - ./rffmpeg.yml:/etc/rffmpeg/rffmpeg.yml:ro
     environment:
       - PUID=1000
       - PGID=1000
