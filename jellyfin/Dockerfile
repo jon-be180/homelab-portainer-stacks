@@ -1,9 +1,10 @@
 FROM lscr.io/linuxserver/jellyfin:latest
 
-# Install python3, yaml support, openssh, and curl
+# Install python3, yaml, click, openssh, and curl
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-yaml \
+    python3-click \
     openssh-client \
     netcat-openbsd \
     curl && \
