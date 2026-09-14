@@ -15,8 +15,8 @@ services:
       # SSH key for passwordless authentication to Windows host
       - E:\Docker\jellyfin\jellyfin_id_ed25519:/root/.ssh/id_ed25519:ro
       # Local rffmpeg configuration
-      - ./rffmpeg.yml:/etc/rffmpeg/rffmpeg.yml:ro
-    environment:
+      - E:\Docker\jellyfin\rffmpeg.yml:/etc/rffmpeg/rffmpeg.yml:ro
+environment:
       - PUID=1000
       - PGID=1000
       - TZ=America/Guatemala
