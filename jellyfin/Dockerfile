@@ -1,9 +1,6 @@
 FROM lscr.io/linuxserver/jellyfin:latest
 
-# Step 1: Update package list
 RUN apt-get update
-
-# Step 2: Install system packages
 RUN apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
@@ -12,11 +9,10 @@ RUN apt-get install -y --no-install-recommends \
     openssh-client \
     netcat-openbsd
 
-# Step 3: Install rffmpeg
-RUN pip3 install --no-cache-dir --break-system-packages rffmpeg
+# Bypass PEP 668 via environment variable
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
 
-# Step 4: Initialize rffmpeg
+RUN pip3 install --no-cache-dir rffmpeg
+
 RUN rffmpeg init
-
-# Step 5: Clean up apt cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
