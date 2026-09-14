@@ -30,6 +30,8 @@ services:
       - 1900:1900/udp
     devices:
       - /dev/dxg:/dev/dxg
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     deploy:
       resources:
         limits:
