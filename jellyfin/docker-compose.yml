@@ -12,7 +12,7 @@ services:
       # Shared transcode directory on E: drive
       - E:\jellyfin_transcode:/transcode
       # SSH key for passwordless authentication to Windows host
-      - E:\Docker\host_ssh\jellyfin_id_ed25519:/root/.ssh/id_ed25519:ro
+      - E:\Docker\jellyfin\jellyfin_id_ed25519:/root/.ssh/id_ed25519:ro
       # Local rffmpeg configuration
       - ./rffmpeg.yml:/etc/rffmpeg/rffmpeg.yml:ro
     environment:
