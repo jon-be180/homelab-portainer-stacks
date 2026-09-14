@@ -17,6 +17,6 @@ RUN curl -fsSL https://raw.githubusercontent.com/joshuaboniface/rffmpeg/master/r
 # Create required directories
 RUN mkdir -p /etc/rffmpeg /var/lib/rffmpeg /custom-cont-init.d
 
-# Write startup initialization script using printf
-RUN printf '#!/bin/bash\nif [ ! -f /var/lib/rffmpeg/rffmpeg.db ]; then\n  rffmpeg init\nfi\n' > /custom-cont-init.d/00-rffmpeg-init.sh && \
+# Write robust startup script
+RUN printf '#!/bin/bash\nif [ -f /etc/rffmpeg/rffmpeg.yml ]; then\n  rffmpeg init\n  chown -R abc:abc /var/lib/rffmpeg /etc/rffmpeg\nfi\n' > /custom-cont-init.d/00-rffmpeg-init.sh && \
     chmod +x /custom-cont-init.d/00-rffmpeg-init.sh
