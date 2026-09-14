@@ -15,8 +15,8 @@ RUN curl -fsSL https://raw.githubusercontent.com/joshuaboniface/rffmpeg/master/r
     chmod +x /usr/local/bin/rffmpeg
 
 # Create required directories
-RUN mkdir -p /etc/rffmpeg /var/lib/rffmpeg
+RUN mkdir -p /etc/rffmpeg /var/lib/rffmpeg /custom-cont-init.d
 
-# Create an init script in LinuxServer's s6 init directory to run 'rffmpeg init' on container start
-RUN echo '#!/bin/bash\nif [ ! -f /var/lib/rffmpeg/rffmpeg.db ]; then\n  rffmpeg init\nfi' > /custom-cont-init.d/00-rffmpeg-init.sh && \
+# Write startup initialization script using printf
+RUN printf '#!/bin/bash\nif [ ! -f /var/lib/rffmpeg/rffmpeg.db ]; then\n  rffmpeg init\nfi\n' > /custom-cont-init.d/00-rffmpeg-init.sh && \
     chmod +x /custom-cont-init.d/00-rffmpeg-init.sh
