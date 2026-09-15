@@ -1,11 +1,12 @@
-target: host.docker.internal
-user: jon
-port: 22
-identity_file: /root/.ssh/id_ed25519
-remote_ffmpeg: E:\Docker\jellyfin\ffmpeg\bin\ffmpeg.exe
-remote_ffprobe: E:\Docker\jellyfin\ffmpeg\bin\ffprobe.exe
+rffmpeg:
+  target: host.docker.internal
+  user: jon
+  port: 22
+  identity_file: /tmp/id_ed25519
+  remote_ffmpeg: "E:\\Docker\\jellyfin\\ffmpeg\\bin\\ffmpeg.exe"
+  remote_ffprobe: "E:\\Docker\\jellyfin\\ffmpeg\\bin\\ffprobe.exe"
 
-path_substitutions:
-  /transcode: E:\jellyfin_transcode
-  /shows: D:\Shows
-  /movies: D:\Movies
+  path_substitutions:
+    /transcode: "E:\\jellyfin_transcode"
+    /shows: "D:\\Shows"
+    /movies: "D:\\Movies"
