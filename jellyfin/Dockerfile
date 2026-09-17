@@ -9,8 +9,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN curl -fsSL https://raw.githubusercontent.com/joshuaboniface/rffmpeg/master/rffmpeg -o /usr/local/bin/rffmpeg && \
     chmod +x /usr/local/bin/rffmpeg
 
-# CRITICAL FIX: Symlink rffmpeg directly into Jellyfin's dedicated ffmpeg path
-RUN ln -sf /usr/local/bin/rffmpeg /usr/lib/jellyfin-ffmpeg/ffmpeg && \
+# CRITICAL FIX: Backup the real ffmpeg binary before symlinking rffmpeg
+RUN cp /usr/lib/jellyfin-ffmpeg/ffmpeg /usr/lib/jellyfin-ffmpeg/ffmpeg.original && \
+    cp /usr/lib/jellyfin-ffmpeg/ffprobe /usr/lib/jellyfin-ffmpeg/ffprobe.original && \
+    ln -sf /usr/local/bin/rffmpeg /usr/lib/jellyfin-ffmpeg/ffmpeg && \
     ln -sf /usr/local/bin/rffmpeg /usr/lib/jellyfin-ffmpeg/ffprobe
 
 # Create required directories
