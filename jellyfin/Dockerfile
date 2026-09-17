@@ -16,19 +16,18 @@ RUN ln -sf /usr/local/bin/rffmpeg /usr/lib/jellyfin-ffmpeg/ffmpeg && \
 # Create required directories
 RUN mkdir -p /etc/rffmpeg /var/lib/rffmpeg /custom-cont-init.d
 
-# Startup script: Non-interactive database init & SSH auto-accept
 RUN printf '#!/bin/bash\n\
 if [ -f /root/.ssh/id_ed25519 ]; then\n\
   cp /root/.ssh/id_ed25519 /tmp/id_ed25519\n\
   chmod 600 /tmp/id_ed25519\n\
 fi\n\
-mkdir -p /var/lib/rffmpeg\n\
+mkdir -p /var/lib/rffmpeg /etc/rffmpeg\n\
 chmod 777 /var/lib/rffmpeg\n\
 if [ -f /etc/rffmpeg/rffmpeg.yml ]; then\n\
-  # CRITICAL FIX: Pipe "y" into rffmpeg init to prevent the interactive [y/N] abort\n\
-  echo "y" | rffmpeg init\n\
+  rffmpeg init -y || true\n\
   rffmpeg add host.docker.internal 2>/dev/null || true\n\
 fi\n\
+touch /var/lib/rffmpeg/rffmpeg.db\n\
 chmod 666 /var/lib/rffmpeg/rffmpeg.db 2>/dev/null || true\n\
 ' > /custom-cont-init.d/00-rffmpeg-init.sh && \
     chmod +x /custom-cont-init.d/00-rffmpeg-init.sh
