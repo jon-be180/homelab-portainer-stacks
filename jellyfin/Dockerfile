@@ -24,8 +24,7 @@ fi\n\
 mkdir -p /var/lib/rffmpeg /etc/rffmpeg\n\
 chmod 777 /var/lib/rffmpeg\n\
 if [ -f /etc/rffmpeg/rffmpeg.yml ]; then\n\
-  rffmpeg init -y || true\n\
-  rffmpeg add host.docker.internal 2>/dev/null || true\n\
+  rffmpeg init 2>/dev/null || true\n\
 fi\n\
 touch /var/lib/rffmpeg/rffmpeg.db\n\
 chmod 666 /var/lib/rffmpeg/rffmpeg.db 2>/dev/null || true\n\
