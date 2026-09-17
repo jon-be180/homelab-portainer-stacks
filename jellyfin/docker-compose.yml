@@ -39,11 +39,11 @@ services:
         limits:
           memory: 4G
     healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 8096 || exit 1"]
-      interval: 300s
+      test: ["CMD-SHELL", "curl -s -f http://localhost:8096/health || exit 1"]
+      interval: 30s
       timeout: 5s
-      retries: 5
-      start_period: 60s
+      retries: 3
+      start_period: 90s
       
 networks:
   jellyfin-net:
