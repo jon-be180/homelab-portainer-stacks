@@ -3,6 +3,9 @@ rffmpeg:
   user: jon
   port: 22
   identity_file: /tmp/id_ed25519
+  args:
+    - "-o"
+    - "StrictHostKeyChecking=no"
   remote_ffmpeg: "E:\\Docker\\jellyfin\\ffmpeg\\bin\\ffmpeg.exe"
   remote_ffprobe: "E:\\Docker\\jellyfin\\ffmpeg\\bin\\ffprobe.exe"
 
