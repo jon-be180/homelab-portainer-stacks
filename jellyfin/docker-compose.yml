@@ -14,7 +14,7 @@ services:
       - E:/jellyfin_transcode:/transcode
       - ${DOCKER_DATA_PATH}/jellyfin/jellyfin_id_ed25519:/config/.ssh/id_ed25519:ro
       - ${DOCKER_DATA_PATH}/jellyfin/rffmpeg.yml:/etc/rffmpeg/rffmpeg.yml:ro
-      - ${DOCKER_DATA_PATH}/jellyfin/rffmpeg_config:/etc/rffmpeg
+      - ${DOCKER_DATA_PATH}/jellyfin/rffmpeg_config:/var/lib/rffmpeg
     environment:
       - PUID=1000
       - PGID=1000
