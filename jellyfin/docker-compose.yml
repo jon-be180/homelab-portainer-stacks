@@ -13,7 +13,7 @@ services:
       - ${MOVIES_PATH}:/movies
       - E:/jellyfin_transcode:/transcode
       - ${DOCKER_DATA_PATH}/jellyfin/jellyfin_id_ed25519:/config/id_ed25519:ro
-      - ${DOCKER_DATA_PATH}/jellyfin/setup-ssh.sh:/custom-cont-init.d/01-setup-ssh.sh:ro
+      - ${DOCKER_DATA_PATH}/jellyfin/setup-ssh.sh:/custom-cont-init.d/01-setup-ssh.sh
       - ${DOCKER_DATA_PATH}/jellyfin/rffmpeg.yml:/etc/rffmpeg/rffmpeg.yml
       - ${DOCKER_DATA_PATH}/jellyfin/rffmpeg_config:/var/lib/rffmpeg
     environment:
