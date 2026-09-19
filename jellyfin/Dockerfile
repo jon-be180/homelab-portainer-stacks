@@ -20,11 +20,6 @@ RUN mkdir -p /etc/rffmpeg /var/lib/rffmpeg /custom-cont-init.d
 
 RUN printf '#!/bin/bash\n\
 mkdir -p /config/.ssh\n\
-if [ -f /config/.ssh/id_ed25519 ]; then\n\
-  cp /config/.ssh/id_ed25519 /tmp/id_ed25519\n\
-  chmod 600 /tmp/id_ed25519\n\
-  chown abc:abc /tmp/id_ed25519\n\
-fi\n\
 mkdir -p /var/lib/rffmpeg /etc/rffmpeg\n\
 chown -R abc:abc /var/lib/rffmpeg /etc/rffmpeg\n\
 touch /var/lib/rffmpeg/rffmpeg.db\n\
