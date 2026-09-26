@@ -11,6 +11,7 @@ services:
       - ${DOCKER_DATA_PATH}/jellyfin/cache:/cache
       - ${SHOWS_PATH}:/shows
       - ${MOVIES_PATH}:/movies
+      - ${GAMES_PATH}:/games
       - E:/jellyfin_transcode:/transcode
       - ${DOCKER_DATA_PATH}/jellyfin/jellyfin_id_ed25519:/config/id_ed25519:ro
       - ${DOCKER_DATA_PATH}/jellyfin/setup-ssh.sh:/custom-cont-init.d/01-setup-ssh.sh
