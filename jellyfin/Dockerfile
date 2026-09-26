@@ -10,10 +10,10 @@ RUN curl -fsSL https://raw.githubusercontent.com/joshuaboniface/rffmpeg/master/r
     chmod +x /usr/local/bin/rffmpeg
 
 # Backup original binaries and set up symlinks
-RUN cp /usr/lib/jellyfin-ffmpeg/ffmpeg /usr/lib/jellyfin-ffmpeg/ffmpeg.original && \
-    cp /usr/lib/jellyfin-ffmpeg/ffprobe /usr/lib/jellyfin-ffmpeg/ffprobe.original && \
-    ln -sf /usr/local/bin/rffmpeg /usr/lib/jellyfin-ffmpeg/ffmpeg && \
-    ln -sf /usr/local/bin/rffmpeg /usr/lib/jellyfin-ffmpeg/ffprobe
+#RUN cp /usr/lib/jellyfin-ffmpeg/ffmpeg /usr/lib/jellyfin-ffmpeg/ffmpeg.original && \
+ #   cp /usr/lib/jellyfin-ffmpeg/ffprobe /usr/lib/jellyfin-ffmpeg/ffprobe.original && \
+#    ln -sf /usr/local/bin/rffmpeg /usr/lib/jellyfin-ffmpeg/ffmpeg && \
+#    ln -sf /usr/local/bin/rffmpeg /usr/lib/jellyfin-ffmpeg/ffprobe
 
 # Create directory structure and permissions
 RUN mkdir -p /etc/rffmpeg /var/lib/rffmpeg /custom-cont-init.d
