@@ -3,6 +3,7 @@ services:
     image: ghcr.io/anomalyco/opencode:latest
     container_name: opencode
     restart: unless-stopped
+    working_dir: /app
     command: ["server", "--port", "3000"]
     ports:
       - "3000:3000"
