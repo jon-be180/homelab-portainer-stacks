@@ -1,0 +1,20 @@
+services:
+  food-recorder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_USDA_API_KEY: ${VITE_USDA_API_KEY:-}
+    image: food-recorder:latest
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8088}:80"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      start_period: 5s
+      retries: 3
+    labels:
+      - "com.docker.compose.project=food-recorder"
+      - "traefik.enable=false"
