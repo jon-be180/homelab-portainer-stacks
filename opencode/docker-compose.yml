@@ -11,5 +11,7 @@ services:
       - OPENCODE_HEADLESS_SERVER=true
       - OPENCODE_CONFIG=/app/config/opencode.json
     volumes:
-      - ${DOCKER_DATA_PATH}/data:/data
-      - ${DOCKER_DATA_PATH}/config:/app/config
+      - ${DOCKER_DATA_PATH}/opencode/data:/data
+      - ${DOCKER_DATA_PATH}/opencode/config:/app/config
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
