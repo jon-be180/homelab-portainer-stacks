@@ -1,6 +1,6 @@
 services:
   opencode:
-    image: ghcr.io/opencode/opencode:latest
+    image: ghcr.io/anomalyco/opencode:latest
     container_name: opencode
     restart: unless-stopped
     ports:
@@ -9,5 +9,5 @@ services:
       - OPENCODE_HEADLESS_SERVER=true
       - OPENCODE_CONFIG=/app/config/opencode.json
     volumes:
-      - ${DOCKER_DATA_PATH}/data:/data
-      - ${DOCKER_DATA_PATH}/config.json:/app/config/config.json:ro
+      - ${DOCKER_DATA_PATH}/opencode/data:/data
+      - ${DOCKER_DATA_PATH}/opencode/config:/app/config
