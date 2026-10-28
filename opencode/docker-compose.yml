@@ -1,0 +1,12 @@
+services:
+  opencode:
+    image: ghcr.io/opencode/opencode:latest
+    container_name: opencode
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - OPENCODE_HEADLESS_SERVER=true
+    volumes:
+      - ${DOCKER_DATA_PATH}/data:/data
+      - ${DOCKER_DATA_PATH}/config.json:/app/config/config.json:ro
