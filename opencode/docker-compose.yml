@@ -3,8 +3,6 @@ services:
     image: ghcr.io/anomalyco/opencode:latest
     container_name: opencode
     restart: unless-stopped
-    working_dir: /server
-    entrypoint: ["sh", "-c", "mkdir -p /server && exec opencode server --port 3000"]
     ports:
       - "3000:3000"
     environment:
