@@ -1,6 +1,7 @@
 services:
   openspeedtest_server:
     image: openspeedtest/latest:latest
+    pull_policy: always
     container_name: openspeedtest_server
     restart: unless-stopped
     ports:
@@ -19,6 +20,7 @@ services:
   openspeedtest_cloudflared:
     container_name: openspeedtest_cloudflared
     image: cloudflare/cloudflared:latest
+    pull_policy: always
     restart: unless-stopped
     # Changed: Removed the custom metrics flag since we are using cloudflared's native check command
     command: tunnel run

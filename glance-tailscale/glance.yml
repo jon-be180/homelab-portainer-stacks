@@ -1,0 +1,151 @@
+server:
+  port: 8080
+
+branding:
+  app-name: Server Ops
+  logo-text: S
+
+theme:
+  background-color: 225 25 8
+  primary-color: 200 90 50
+  contrast-multiplier: 1.1
+  presets:
+    midnight:
+      background-color: 230 30 5
+      primary-color: 200 90 55
+    daylight:
+      light: true
+      background-color: 220 30 95
+      primary-color: 215 80 45
+
+pages:
+  - name: Server Ops
+    columns:
+      - size: small
+        widgets:
+          - type: clock
+            hour-format: 24h
+            timezones:
+              - timezone: America/Guatemala
+                label: Guatemala (GT)
+              - timezone: Asia/Kolkata
+                label: India Time (IST)
+              - timezone: America/New_York
+                label: New York (EST)
+              - timezone: America/Denver
+                label: Mountain Time (MT)
+              - timezone: America/Los_Angeles
+                label: California Time (PST)
+          - type: calendar
+          - type: markets
+            markets:
+              - symbol: SPY
+                name: S&P 500
+              - symbol: BTC-USD
+                name: Bitcoin
+                chart-link: https://www.tradingview.com/chart/?symbol=INDEX:BTCUSD
+              - symbol: NVDA
+                name: NVIDIA
+              - symbol: AAPL
+                name: Apple
+
+      - size: full
+        widgets:
+          - type: server-stats
+            servers:
+              - type: local
+                name: Services
+
+          - type: monitor
+            cache: 1m
+            title: Tailscale Services
+            sites:
+              - title: Immich (Photos)
+                url: http://media.cougar-lake.ts.net:2283
+                icon: sh:immich
+              - title: Navidrome (Music)
+                url: http://media.cougar-lake.ts.net:4533
+                check-url: http://media.cougar-lake.ts.net:4533/ping
+                icon: sh:navidrome
+              - title: Jellyfin (Videos)
+                url: http://media.cougar-lake.ts.net:8096
+                check-url: http://media.cougar-lake.ts.net:8096/health
+                icon: sh:jellyfin
+              - title: Speedtest
+                url: http://media.cougar-lake.ts.net:3080
+                icon: https://raw.githubusercontent.com/selfhst/icons/main/svg/speedtest-light.svg
+              - title: Home Assistant
+                url: http://media.cougar-lake.ts.net:8123
+                icon: sh:home-assistant
+              - title: qBittorrent
+                url: http://media.cougar-lake.ts.net:8081
+                icon: sh:qbittorrent
+              - title: Radarr
+                url: http://media.cougar-lake.ts.net:7878
+                check-url: http://media.cougar-lake.ts.net:7878/ping
+                icon: sh:radarr
+              - title: Sonarr
+                url: http://media.cougar-lake.ts.net:8989
+                check-url: http://media.cougar-lake.ts.net:8989/ping
+                icon: sh:sonarr
+              - title: Tdarr
+                url: http://media.cougar-lake.ts.net:9425
+                icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/tdarr.png
+              - title: Syncthing
+                url: http://media.cougar-lake.ts.net:8384
+                icon: sh:syncthing
+              - title: OpenCode
+                url: http://media.cougar-lake.ts.net:3000
+                icon: di:opencode
+              - title: Portainer
+                url: https://media.cougar-lake.ts.net:9443
+                allow-insecure: true
+                icon: sh:portainer
+
+          - type: bookmarks
+            title: Quick Links
+            groups:
+              - title: Media
+                links:
+                  - title: Immich
+                    url: http://media.cougar-lake.ts.net:2283
+                    icon: sh:immich
+                  - title: Jellyfin
+                    url: http://media.cougar-lake.ts.net:8096
+                    icon: sh:jellyfin
+                  - title: Navidrome
+                    url: http://media.cougar-lake.ts.net:4533
+                    icon: sh:navidrome
+              - title: Automation
+                links:
+                  - title: Home Assistant
+                    url: http://media.cougar-lake.ts.net:8123
+                    icon: sh:home-assistant
+                  - title: OpenCode
+                    url: http://media.cougar-lake.ts.net:3000
+                    icon: di:opencode
+                  - title: Portainer
+                    url: https://media.cougar-lake.ts.net:9443
+                    icon: sh:portainer
+              - title: Downloads
+                links:
+                  - title: qBittorrent
+                    url: http://media.cougar-lake.ts.net:8081
+                    icon: sh:qbittorrent
+                  - title: Radarr
+                    url: http://media.cougar-lake.ts.net:7878
+                    icon: sh:radarr
+                  - title: Sonarr
+                    url: http://media.cougar-lake.ts.net:8989
+                    icon: sh:sonarr
+                  - title: Tdarr
+                    url: http://media.cougar-lake.ts.net:9425
+                    icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/tdarr.png
+                  - title: Syncthing
+                    url: http://media.cougar-lake.ts.net:8384
+                    icon: sh:syncthing
+              - title: Public
+                links:
+                  - title: Speedtest (Public)
+                    url: https://speedtest.knightgil.com
+                    icon: https://raw.githubusercontent.com/selfhst/icons/main/svg/speedtest-light.svg

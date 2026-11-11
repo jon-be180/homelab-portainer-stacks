@@ -1,16 +1,15 @@
-version: '3.8'
-
 services:
   navidrome_server:
     image: deluan/navidrome:latest
+    pull_policy: always
     container_name: navidrome
     ports:
       - "4533:4533"
     restart: unless-stopped
     environment:
       ND_SCANSCHEDULE: "@every 1h"
-      ND_LOGLEVEL: info  
-      ND_BASEURL: ${ND_BASEURL}
+      ND_LOGLEVEL: info
+      ND_BASEURL: ${ND_BASEURL:-http://media.cougar-lake.ts.net:4533}
     volumes:
       - ${DOCKER_DATA_PATH}/navidrome/data:/data
       - ${DOCKER_MUUSIC_PATH}:/music:ro
@@ -20,4 +19,3 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-
