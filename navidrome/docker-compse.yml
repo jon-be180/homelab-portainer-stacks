@@ -20,21 +20,4 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-    
-  navidrome_cloudflared:
-    container_name: navidrome_cloudflared
-    image: cloudflare/cloudflared:latest
-    restart: unless-stopped
-    environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN} 
-      - TUNNEL_METRICS=0.0.0.0:60123
-    command: tunnel run
-    depends_on:
-      navidrome_server: # <-- Changed this from "navidrome" to "navidrome_server"
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "cloudflared", "tunnel", "ready"]
-      interval: 300s
-      timeout: 10s
-      retries: 3
-      start_period: 15s
+

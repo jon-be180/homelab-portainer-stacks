@@ -80,27 +80,7 @@ services:
       start_period: 5m
     restart: always
 
-  immich_cloudflared:
-    container_name: immich_cloudflared
-    image: cloudflare/cloudflared:latest
-    restart: unless-stopped
-    command: tunnel run
-    environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
-      - TUNNEL_METRICS=0.0.0.0:60123
-      - TUNNEL_EDGE_IP_VERSION=4
-    networks:
-      - immich-net
-    # Removed the strict "condition: service_healthy" block from here
-    depends_on:
-      - immich_server
-    healthcheck:
-      test: ["CMD", "cloudflared", "tunnel", "ready"]
-      interval: 300s
-      timeout: 10s
-      retries: 3
-      start_period: 15s
-    
+
 volumes:
   model-cache:
 
