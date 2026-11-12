@@ -3,6 +3,10 @@ services:
     image: openspeedtest/latest:latest
     pull_policy: always
     container_name: openspeedtest_server
+    networks:
+      default:
+        aliases:
+          - openspeedtest
     restart: unless-stopped
     ports:
       - "3080:3000" # HTTP Access
