@@ -63,6 +63,10 @@ pages:
               - title: Immich (Photos)
                 url: http://media.cougar-lake.ts.net:2283
                 icon: sh:immich
+              - title: Food Recorder
+                url: http://media.cougar-lake.ts.net:8088
+                check-url: http://media.cougar-lake.ts.net:8088/
+                icon: sh:apple
               - title: Navidrome (Music)
                 url: http://media.cougar-lake.ts.net:4533
                 check-url: http://media.cougar-lake.ts.net:4533/ping
@@ -144,6 +148,17 @@ pages:
                   - title: Syncthing
                     url: http://media.cougar-lake.ts.net:8384
                     icon: sh:syncthing
+              - title: Personal Projects
+                links:
+                  - title: Food Recorder
+                    url: http://media.cougar-lake.ts.net:8088
+                    icon: sh:apple
+                  - title: Sokbo (Trading Bot)
+                    url: https://sokbo.knightgil.com
+                    icon: sh:chart
+                  - title: Price Comparison (Coming Soon)
+                    url: https://github.com/jon-be180/price-comparison
+                    icon: sh:target
               - title: Public
                 links:
                   - title: Speedtest (Public)
