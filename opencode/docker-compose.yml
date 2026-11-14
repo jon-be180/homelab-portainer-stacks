@@ -9,8 +9,13 @@ services:
     environment:
       - OPENCODE_HEADLESS_SERVER=true
       - OPENCODE_CONFIG=/app/config/opencode.json
+      - XDG_DATA_HOME=/data/.opencode
+      - OPENCODE_CONFIG_CONTENT='{"$schema":"https://opencode.ai/config.json","share":"auto"}'
     volumes:
       - ${DOCKER_DATA_PATH}/opencode/data:/data
       - ${DOCKER_DATA_PATH}/opencode/config:/app/config
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    labels:
+      - "com.docker.stack.name=opencode"
+      - "maintainer=homelab"
