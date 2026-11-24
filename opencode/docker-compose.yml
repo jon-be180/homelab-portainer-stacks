@@ -21,7 +21,7 @@ services:
       - "maintainer=homelab"
 
   llamacpp-fast:
-    image: ghcr.io/ggml-org/llama.cpp:server
+    image: ghcr.io/ggml-org/llama.cpp:full
     container_name: llamacpp-fast
     restart: unless-stopped
     ports:
