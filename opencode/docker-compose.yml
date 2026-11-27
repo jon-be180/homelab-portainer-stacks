@@ -21,7 +21,7 @@ services:
       - "com.docker.stack.name=opencode"
       - "maintainer=homelab"
 
-opencode-proxy:
+  opencode-proxy:
     image: nginx:alpine
     container_name: opencode-proxy
     restart: unless-stopped
