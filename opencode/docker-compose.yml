@@ -37,3 +37,47 @@ services:
     labels:
       - "com.docker.stack.name=opencode"
       - "maintainer=homelab"
+
+opencode-proxy:
+    image: nginx:alpine
+    container_name: opencode-proxy
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    environment:
+      - OPENCODE_PASSWORD=${OPENCODE_PASSWORD:-pass}
+    configs:
+      - source: opencode_nginx_template
+        target: /etc/nginx/opencode.conf.template
+        mode: 0444
+      - source: opencode_render_script
+        target: /docker-entrypoint.d/15-render-opencode-config.sh
+        mode: 0755
+    depends_on:
+      - opencode
+    labels:
+      - "com.docker.stack.name=opencode"
+      - "maintainer=homelab"
+
+configs:
+  opencode_nginx_template:
+    content: |
+      server {
+        listen 80;
+        location / {
+          proxy_pass http://opencode:3000;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $$http_upgrade;
+          proxy_set_header Connection "upgrade";
+          proxy_set_header Host $$host;
+          proxy_set_header X-Real-IP $$remote_addr;
+          proxy_set_header X-Forwarded-For $$proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $$scheme;
+        }
+      }
+  opencode_render_script:
+    content: |
+      #!/bin/sh
+      set -e
+      rm -f /etc/nginx/conf.d/default.conf
+      cp /etc/nginx/opencode.conf.template /etc/nginx/conf.d/default.conf
