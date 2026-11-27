@@ -21,23 +21,6 @@ services:
       - "com.docker.stack.name=opencode"
       - "maintainer=homelab"
 
-  opencode-proxy:
-    image: nginx:alpine
-    container_name: opencode-proxy
-    restart: unless-stopped
-    ports:
-      - "3000:80"
-    environment:
-      - OPENCODE_PASSWORD=${OPENCODE_PASSWORD:-pass}
-    volumes:
-      - ./nginx.conf.template:/etc/nginx/opencode.conf.template:ro
-      - ./render-nginx-config.sh:/docker-entrypoint.d/15-render-opencode-config.sh:ro
-    depends_on:
-      - opencode
-    labels:
-      - "com.docker.stack.name=opencode"
-      - "maintainer=homelab"
-
 opencode-proxy:
     image: nginx:alpine
     container_name: opencode-proxy
